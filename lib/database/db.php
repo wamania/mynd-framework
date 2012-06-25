@@ -32,116 +32,116 @@
  */
 class MfDb
 {
-	/**
-	 * Connexion DSN
-	 * @var String
-	 */
-	private $dsn;
+    /**
+     * Connexion DSN
+     * @var String
+     */
+    private $dsn;
 
-	/**
-	 * Connexion user
-	 * @var String
-	 */
-	private $user;
+    /**
+     * Connexion user
+     * @var String
+     */
+    private $user;
 
-	/**
-	 * Connexion pass
-	 * @var String
-	 */
-	private $pass;
+    /**
+     * Connexion pass
+     * @var String
+     */
+    private $pass;
 
-	/**
-	 * @var Object of PDO
-	 */
-	private $pdo;
+    /**
+     * @var Object of PDO
+     */
+    private $pdo;
 
-	/**
-	 * @var Object of PDOStatement
-	 */
-	//private $pdoStatement;
+    /**
+     * @var Object of PDOStatement
+     */
+    //private $pdoStatement;
 
-	/**
-	 * Default constructor
-	 * @param $config
-	 * @return unknown_type
-	 */
-	public function __construct($dsn, $user, $pass)
-	{
-		/*if ( ! is_null($config)) {
-		 $this->setConfig($config);
-		 }*/
-		$this->dsn = $dsn;
-		$this->user = $user;
-		$this->pass = $pass;
-	}
+    /**
+     * Default constructor
+     * @param $config
+     * @return unknown_type
+     */
+    public function __construct($dsn, $user, $pass)
+    {
+        /*if ( ! is_null($config)) {
+         $this->setConfig($config);
+        }*/
+        $this->dsn = $dsn;
+        $this->user = $user;
+        $this->pass = $pass;
+    }
 
-	/**
-	 * Set connexion config
-	 * @return void
-	 * @param Array $config
-	 */
-	/*public function setConfig($config)
-	 {
-	 $this->dsn = $config['dsn'];
-	 $this->user = $config['user'];
-	 $this->pass = $config['pass'];
-	 }*/
+    /**
+     * Set connexion config
+     * @return void
+     * @param Array $config
+     */
+    /*public function setConfig($config)
+     {
+    $this->dsn = $config['dsn'];
+    $this->user = $config['user'];
+    $this->pass = $config['pass'];
+    }*/
 
-	/**
-	 * Create PDO Object
-	 * @return void
-	 * @throw MfException
-	 */
-	public function connect()
-	{
-		if ( (empty($this->dsn)) || (empty($this->user)) || (empty($this->pass)) ) {
-			throw new MfException('You must give the access codes to the database');
-		}
+    /**
+     * Create PDO Object
+     * @return void
+     * @throw MfException
+     */
+    public function connect()
+    {
+        if ( (empty($this->dsn)) || (empty($this->user)) || (empty($this->pass)) ) {
+            throw new MfException('You must give the access codes to the database');
+        }
 
-		try {
-			$this->pdo = new PDO($this->dsn, $this->user, $this->pass);
+        try {
+            $this->pdo = new PDO($this->dsn, $this->user, $this->pass);
 
-			$this->pdo->exec("SET NAMES 'utf8'");
-			$this->pdo->exec("SET CHARACTER SET 'utf8'");
+            $this->pdo->exec("SET NAMES 'utf8'");
+            $this->pdo->exec("SET CHARACTER SET 'utf8'");
 
-			$this->pdo->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
-			$this->pdo->setAttribute( PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC );
+            $this->pdo->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+            $this->pdo->setAttribute( PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC );
 
-		} catch(PDOExcetpion $e) {
-			throw new LiException('Echec connexion PDO : '.$e->getMessage());
-			//echo 'Echec connexion PDO : '.$e->getMessage()."\n<br />";
-		}
-	}
+        } catch(PDOExcetpion $e) {
+            throw new LiException('Echec connexion PDO : '.$e->getMessage());
+            //echo 'Echec connexion PDO : '.$e->getMessage()."\n<br />";
+        }
+    }
 
-	public function __call($method, $args)
-	{
-		if (is_null($this->pdo)) {
-			$this->connect();
-		}
+    public function __call($method, $args)
+    {
+        if (is_null($this->pdo)) {
+            $this->connect();
+        }
 
-		if(method_exists($this->pdo, $method)) {
-			return call_user_func_array(array($this->pdo, $method), $args);
-		}
-	}
+        if(method_exists($this->pdo, $method)) {
+            return call_user_func_array(array($this->pdo, $method), $args);
+        }
+    }
 
-	/**
-	 * Destroy PDO Object
-	 * @return void
-	 */
-	/*public function disconnect()
-	 {
-	 $this->pdo = null;
-	 }*/
+    /**
+     * Destroy PDO Object
+     * @return void
+     */
+    /*public function disconnect()
+     {
+    $this->pdo = null;
+    }*/
 
-	/**
-	 * @deprecated
-	 * Enter description here ...
-	 */
-	public function &getPdo()
-	{
-		if ($this->pdo === null) {
-			$this->connect();
-		}
-		return $this->pdo;
-	}
+    /**
+     * @deprecated
+     * Enter description here ...
+     */
+    public function &getPdo()
+    {
+        if ($this->pdo === null) {
+            $this->connect();
+        }
+        return $this->pdo;
+    }
 }

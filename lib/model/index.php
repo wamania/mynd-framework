@@ -1,7 +1,7 @@
 <?php
 /**
  * Fichier index.php
- * C'est lui qui devrait être inclu dans 
+ * C'est lui qui devrait être inclu dans
  * le script qui utilisera Mynd Framework
  * Il contient l'initialisation, aisi que 2 classes nécessaires,
  * mais non codées ici : un cache et une classe d'exception
@@ -11,7 +11,7 @@
  *       to Share - to copy, distribute and transmit the work
  *       to Remix - to adapt the work
  *     Under the following conditions:
- *       Attribution - You must attribute the work in the manner specified by the author or licensor 
+ *       Attribution - You must attribute the work in the manner specified by the author or licensor
  *       (but not in any way that suggests that they endorse you or your use of the work).
  *       Just keep this header.
  *
@@ -20,7 +20,7 @@
  * @version    $Id:$
  * @link       http://www.wamania.com
  * @since      File available since Release 0.1
-*/
+ */
 
 //require_once LI_LIB.'model/db.php';
 require_once LI_LIB.'model/model.php';
@@ -29,7 +29,7 @@ require_once LI_LIB.'model/model.php';
 
 /**
  * Classe d'initialisation de lithium orm
- * 
+ *
  * Cette classe est appelée de l'extérieur afin d'initialiser le script
  * <code>
  * MfInitModel::init($path_to_models, array (
@@ -48,17 +48,17 @@ require_once LI_LIB.'model/model.php';
  * @link       http://www.wamania.com
  * @since      Class available since Release 0.1
  */
-class MfInitSimpleModel 
+class MfInitSimpleModel
 {
     /**
      * Appelée par l'autoLoad pour charger les models
      * @return void
      * @param String $class
      */
-    public static function includeModel($class) 
+    public static function includeModel($class)
     {
         $class_name = strtolower($class);
-        
+
         if ( ! file_exists(LI_APP.'/model/'.$class_name.'.php')) {
             throw new MfException('File '.LI_APP.'/model/'.$class_name.'.php for model '.$class_name.' doesn\'t exist');
         }

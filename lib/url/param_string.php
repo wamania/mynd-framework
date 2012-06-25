@@ -1,7 +1,7 @@
 <?php
 
-abstract class MfParamString implements iUrlEngine {
-    
+abstract class MfParamString implements iUrlEngine
+{
     public function url2params($url, $get) {
         $routes = _r('routes');
         if (!is_array($routes)) {
@@ -9,29 +9,29 @@ abstract class MfParamString implements iUrlEngine {
         }
 
         $tabUrl = explode('/', $url);
-        
+
         foreach ($routes as $route) {
-             
-             $routeUrl = substr($route['url'], 1, strlen($route['url'])-1);
-             
-             // 1er test, le nombre de params
-             $tabRouteUrl = explode('/', $routeUrl);
-             if (count($tabRouteUrl) != count($tabUrl)) {
+
+            $routeUrl = substr($route['url'], 1, strlen($route['url'])-1);
+
+            // 1er test, le nombre de params
+            $tabRouteUrl = explode('/', $routeUrl);
+            if (count($tabRouteUrl) != count($tabUrl)) {
                 continue;
-             }
-             
-             // ensuite, test si la regexp de l'url est bonne
-             preg_match_all("/:([a-zA-Z0-9_]*)/", $routeUrl, $neededParams);
-             $url_regexp = $routeUrl;
-             foreach ($neededParams['1'] as $p) {
+            }
+
+            // ensuite, test si la regexp de l'url est bonne
+            preg_match_all("/:([a-zA-Z0-9_]*)/", $routeUrl, $neededParams);
+            $url_regexp = $routeUrl;
+            foreach ($neededParams['1'] as $p) {
                 // On cherche si une regexp est definit dans la route
                 $regexp = (isset($route['params'][$p]) ? $route['params'][$p] : '[a-zA-Z0-9_]*');
                 $regexp = '(?P<'.$p.'>'.$regexp.')';
                 $url_regexp = preg_replace("/(:".$p.")/", $regexp, $url_regexp);
-                
-             }
-             $url_regexp = '#^'.$url_regexp.'$#i';
-             if (preg_match($url_regexp, $url, $matches)) {
+
+            }
+            $url_regexp = '#^'.$url_regexp.'$#i';
+            if (preg_match($url_regexp, $url, $matches)) {
                 foreach($matches as $key => $match) {
                     if (is_int($key)) {
                         unset($matches[$key]);
@@ -42,30 +42,30 @@ abstract class MfParamString implements iUrlEngine {
                 }
                 unset($get['ps']);
                 return array_merge($route['params'], $matches, $this->array_urldecode($get));
-             }
+            }
         }
         return $this->array_urldecode($get);
     }
-    
+
     public function params2path($params) {
 
-    	if (empty($params['controller'])) {
-    		$params['controller'] = _c('default_controller');
-    	}
-    	if (empty($params['action'])) {
-    		$params['action'] = _c('default_action');
-    	}
-    	if (empty($params['module'])) {
-    		$params['module'] = _c('default_module');
-    	}
+        if (empty($params['controller'])) {
+            $params['controller'] = _c('default_controller');
+        }
+        if (empty($params['action'])) {
+            $params['action'] = _c('default_action');
+        }
+        if (empty($params['module'])) {
+            $params['module'] = _c('default_module');
+        }
 
         $routes = _r('routes');
         $url = null;
 
         foreach ($routes as $route) {
-            
+
             $badparams = false;
-            
+
             preg_match_all("/:([a-zA-Z0-9_]*)/", $route['url'], $neededParams);
             if (empty($route['params'])) {
                 $route['params'] = array();
@@ -74,9 +74,9 @@ abstract class MfParamString implements iUrlEngine {
             // à ce qu'on a spécifié dans le tableau params
             $ValueParamsURL = array();
             foreach ($neededParams['1'] as $p) {
-                
+
                 if (isset($params[$p])) {
-                    
+
                     if (isset($route['params'][$p])) {
                         $regexp = $route['params'][$p];
                     } else {
@@ -84,28 +84,28 @@ abstract class MfParamString implements iUrlEngine {
                     }
                     if (preg_match('#'.$regexp.'#i', $params[$p])) {
                         $ValueParamsURL[$p] = $params[$p];
-                    
-                    // Le params initiale ne correspond pas à la regexp donnée par la route
+
+                        // Le params initiale ne correspond pas à la regexp donnée par la route
                     } else {
                         $badparams = true;
                     }
-                
-                // le params existe dans l'url, mais pas de le tableau initial 
+
+                    // le params existe dans l'url, mais pas de le tableau initial
                 } else {
                     $badparams = true;
                 }
             }
-            
+
             if ($badparams) {
                 continue;
             }
-            
+
             // On regroupe les paramètres de l'url et ceux de la route
             $tabParamsURL = array_merge($route['params'], $ValueParamsURL);
 
             // On vérifie qu'on a bien tous nos paramètres !
             foreach ($tabParamsURL as $key => $value) {
-            	
+
                 if ($value != $params[$key]) {
                     $badparams = true;
                 }
@@ -113,18 +113,18 @@ abstract class MfParamString implements iUrlEngine {
             if ($badparams) {
                 continue;
             }
-            
+
             // On a notre route !
             $finalTabParams = $route;
             $finalNeededParams = $neededParams['1'];
             $finalParamsURL = $tabParamsURL;
-                
+
             break;
         }
-        
+
         // on vire le module si on l'a rajouté au début (pour eviter une erreur sur l'indexe null)
         if (is_null($params['module'])) {
-        	unset($params['module']);
+            unset($params['module']);
         }
 
         // On a notre route
@@ -138,31 +138,31 @@ abstract class MfParamString implements iUrlEngine {
         if (count($getParams) > 0) {
             $tabTempurl = array();
             foreach ($getParams as $key=>$value) {
-            	if (!empty($value)) {
-            		if (is_array($value)) {
-                		foreach ($value as $v) {
-                			$tabTempurl[] = $key.'[]='.urlencode($v);
-                		}
-                	} else {
-                		$tabTempurl[] = $key.'='.urlencode($value);
-            		}
-            	}
+                if (!empty($value)) {
+                    if (is_array($value)) {
+                        foreach ($value as $v) {
+                            $tabTempurl[] = $key.'[]='.urlencode($v);
+                        }
+                    } else {
+                        $tabTempurl[] = $key.'='.urlencode($value);
+                    }
+                }
             }
             if (count($tabTempurl)) {
-            	$url .= '?';
-            	$url .= implode('&', $tabTempurl);
+                $url .= '?';
+                $url .= implode('&', $tabTempurl);
             }
         }
-        
+
         return $url;
     }
-    
+
     protected function array_urldecode($tab) {
-        
+
         $new_tab = array();
-        
+
         foreach ($tab as $key => $value) {
-            
+
             if (is_array($value)) {
                 $new_tab[$key] = self::array_urldecode($value);
             } else {
@@ -172,4 +172,3 @@ abstract class MfParamString implements iUrlEngine {
         return $new_tab;
     }
 }
-?>
