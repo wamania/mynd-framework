@@ -5,7 +5,7 @@
  * Définit le modèle et la vue
  */
 
-abstract class LiController {
+abstract class MfController {
 
 	/**
 	 * L'objet supportant la requete
@@ -89,7 +89,7 @@ abstract class LiController {
 		
 		$this->isRendered = false;
 		
-		$this->session = new LiPHPSession;
+		$this->session = new MfPHPSession;
 		$this->session->start();
 	
 		$this->request = $request;
@@ -110,14 +110,14 @@ abstract class LiController {
 
 		$this->lastParams = $this->session['lastParams'];
 		
-		$this->view = new LiView($this);
+		$this->view = new MfView($this);
 		
 		// cache
 		$cache = _c('cache');
 		if (empty($cache)) {
-			$cache = 'LiFakecache';
+			$cache = 'MfFakecache';
 		} else {
-			$cache = 'Li'.ucwords($cache);
+			$cache = 'Mf'.ucwords($cache);
 		}
 		
 		$this->cache = new $cache;
@@ -468,7 +468,7 @@ abstract class LiController {
 		if (is_null($this->nextParams)) {
 			return null;
 		}
-		$request = new LiRequest();
+		$request = new MfRequest();
 		$request->setParams($this->nextParams);
 		return $request;
 	}

@@ -34,7 +34,7 @@
  * @link       http://www.wamania.com
  * @since      Class available since Release 0.1
  */
-class LiSqlQuery implements Iterator, Countable 
+class MfSqlQuery implements Iterator, Countable 
 {
     /**
      * @var String

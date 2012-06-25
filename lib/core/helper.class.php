@@ -1,6 +1,6 @@
 <?php
 
-class LiHelper {
+class MfHelper {
     
     /**
      * Helper nous renvoyant un lien interne formatté selon l'url 
@@ -37,7 +37,7 @@ class LiHelper {
      */
     public static function url(Array $params) {
         
-        $urlEngineClassName = 'Li'.ucwords(_c('url_handler')).'Url';
+        $urlEngineClassName = 'Mf'.ucwords(_c('url_handler')).'Url';
         $urlEngine = new $urlEngineClassName;
 
         return $urlEngine->params2url($params);
@@ -45,7 +45,7 @@ class LiHelper {
     
     public static function urlTodomain($domain, Array $params) {
     	
-    	$urlEngineClassName = 'Li'.ucwords(_c('url_handler')).'Url';
+    	$urlEngineClassName = 'Mf'.ucwords(_c('url_handler')).'Url';
         $urlEngine = new $urlEngineClassName;
     	
         $path = $urlEngine->params2path($params);

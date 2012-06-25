@@ -2,7 +2,7 @@
 /**
  * 
  */
-class LiRegistery 
+class MfRegistery 
 {
 	
 	private static $data;

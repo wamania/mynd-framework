@@ -1,5 +1,5 @@
 <?php
-class LiSimpleModel
+class MfSimpleModel
 {
 	protected $db;
 
@@ -44,9 +44,9 @@ class LiSimpleModel
 		// cache
 		$cache = _c('cache');
 		if (empty($cache)) {
-			$cache = 'LiFakecache';
+			$cache = 'MfFakecache';
 		} else {
-			$cache = 'Li'.ucwords($cache);
+			$cache = 'Mf'.ucwords($cache);
 		}
 
 		$this->cache = new $cache;

@@ -1,6 +1,6 @@
 <?php
 
-class LiMultiviewsUrl extends LiParamString implements iUrlEngine {
+class MfMultiviewsUrl extends MfParamString implements iUrlEngine {
 	
     public function path2url($path, $domain = null) {
     	

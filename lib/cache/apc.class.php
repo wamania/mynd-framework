@@ -1,6 +1,6 @@
 <?php
 
-class LiApcCache
+class MfApcCache
 {
 	public function __construct()
 	{

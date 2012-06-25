@@ -52,7 +52,7 @@ require_once LI_MODEL.'associations/manytomany.php';
  * @link       http://www.wamania.com
  * @since      Class available since Release 0.1
  */
-class LiInitOrm 
+class MfInitOrm 
 {
     /**
      * Chemin vers les fichier "models"
@@ -111,7 +111,7 @@ class LiInitOrm
  * @link       http://www.wamania.com
  * @since      Class available since Release 0.1
  */
-class LiCache 
+class MfCache 
 {
     
     private $data;

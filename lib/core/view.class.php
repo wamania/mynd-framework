@@ -2,7 +2,7 @@
 /**
  * Notre classe Vue
  */
-class LiView {
+class MfView {
 
 	/**
 	 * Notre tableau de données provenant de la vue
@@ -94,7 +94,7 @@ class LiView {
 
 		//$template = LI_APP.'modules/'.$template['module'].'/view/'.$template['controller'].'/_'.$template['action'].'.php';
 
-		$partialView = new LiView($this->controller);
+		$partialView = new MfView($this->controller);
 
 		return $partialView->render($template, $data);
 	}

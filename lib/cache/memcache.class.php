@@ -1,6 +1,6 @@
 <?php
 
-class LiMemcache
+class MfMemcache
 {
 	private $memcache;
 	

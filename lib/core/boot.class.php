@@ -2,7 +2,7 @@
 /**
  * Analyse l'url puis appelle le bon couple controller/action
  */
-class LiBoot 
+class MfBoot 
 {
 
 	/**
@@ -17,66 +17,48 @@ class LiBoot
 		if ($environment === false) {
 			$environment = 'production';
 		}
-		LiRegistery::set('environment', $environment);
+		MfRegistery::set('environment', $environment);
 
 		// configuration du site
-		LiRegistery::load('config', LI_APP.'config/config.php');
+		MfRegistery::load('config', LI_APP.'config/config.php');
 		
 		// configuration par default
-		LiRegistery::setAndMerge('config', array(
+		MfRegistery::setAndMerge('config', array(
 			'default_module' => 'default',
 			'default_controller' => 'default',
 			'default_action' => 'index'
 		));
 		
 		
-		LiRegistery::load('routes', LI_APP.'config/routes.php');
+		MfRegistery::load('routes', LI_APP.'config/routes.php');
 
 		$db_config = array();
 
 		if (file_exists(LI_APP.'config/database.php')) {
 			 
-			LiRegistery::load('db_config', LI_APP.'config/database.php');
+			MfRegistery::load('db_config', LI_APP.'config/database.php');
 			
 			// initialisation du model
 			$db_config = _r('db_config');
 			
 			if ( ( ! empty($db_config['dsn'])) && ( ! empty($db_config['user'])) && ( ! empty($db_config['pass'])) ) {
-				LiRegistery::set('db', new LiDb($db_config['dsn'], $db_config['user'], $db_config['pass']));
-				//LiSelect::setDb(_r('db'));
+				MfRegistery::set('db', new MfDb($db_config['dsn'], $db_config['user'], $db_config['pass']));
 				
 				if (_c('model') == 'orm') {
-					spl_autoload_register(array('LiInitOrm', 'includeModel'));
+					spl_autoload_register(array('MfInitOrm', 'includeModel'));
 				
 				} elseif (_c('model') == 'simple') {
-					spl_autoload_register(array('LiInitSimpleModel', 'includeModel'));
+					spl_autoload_register(array('MfInitSimpleModel', 'includeModel'));
 				}
 			}
-			
-			/*if (class_exists('LiInitOrm')) {
-				LiInitOrm::init(LI_APP.'/model/', _r('db'));
-			}*/
 		}
 
 		// On construit l'objet requete qui va contenir les params d'entrées
 		// ainsi que l'analyse de l'url pour déterminer l'app/controller/action
 		// à utiliser
-		$request = new LiRequest();
+		$request = new MfRequest();
 		$params = &$request->getParams();
-		$config = LiRegistery::get('config');
-
-		// initialisation du model
-		//$db_config = _r('db_config');
-
-		/*if (!array_key_exists('dsn', $db_config)) {
-			foreach ($db_config as $key => $value) {
-				LiRegistery::set('db_'.$key, new LiDb($value));
-			}
-			 
-		} else {*/
-			//LiInitModel::init(LI_APP.'/model', _r('db'));
-			//LiRegistery::set('db', new LiDb($db_config));
-		//}
+		$config = MfRegistery::get('config');
 
 		// On insère l'éventuel helper lié à notre application
 		if (file_exists(LI_APP.'helper/helper.php')) {
@@ -94,7 +76,7 @@ class LiBoot
 		$response = self::launch($request);
 
 		// la reponse est une requete, on la lance
-		if ($response instanceof LiRequest) {
+		if ($response instanceof MfRequest) {
 			$response = self::launch($response);
 		}
 
@@ -103,7 +85,7 @@ class LiBoot
 	
 	public static function launch(&$request)
 	{
-		$response = new LiResponse();
+		$response = new MfResponse();
 		$params = &$request->getParams();
 		
 		// Si app/controller/action vide => 404

@@ -2,7 +2,7 @@
 /**
  * Fichier index.php
  * C'est lui qui devrait être inclu dans 
- * le script qui utilisera Lithium
+ * le script qui utilisera Mynd Framework
  * Il contient l'initialisation, aisi que 2 classes nécessaires,
  * mais non codées ici : un cache et une classe d'exception
  *
@@ -32,7 +32,7 @@ require_once LI_LIB.'model/model.php';
  * 
  * Cette classe est appelée de l'extérieur afin d'initialiser le script
  * <code>
- * LiInitModel::init($path_to_models, array (
+ * MfInitModel::init($path_to_models, array (
  *     'dsn' => 'mysql:host=localhost;dbname=lithium',
  *     'user' => 'root',
  *     'pass' => 'pass'
@@ -42,13 +42,13 @@ require_once LI_LIB.'model/model.php';
  *
  * @copyright  2008 Wamania.com
  * @license    http://creativecommons.org/licenses/by/2.0/fr/
- * @package    Lithium
+ * @package    Mynd Framework
  * @subpackage ORM
  * @version    Release: @package_version@
  * @link       http://www.wamania.com
  * @since      Class available since Release 0.1
  */
-class LiInitSimpleModel 
+class MfInitSimpleModel 
 {
     /**
      * Appelée par l'autoLoad pour charger les models
@@ -60,7 +60,7 @@ class LiInitSimpleModel
         $class_name = strtolower($class);
         
         if ( ! file_exists(LI_APP.'/model/'.$class_name.'.php')) {
-            throw new LiException('File '.LI_APP.'/model/'.$class_name.'.php for model '.$class_name.' doesn\'t exist');
+            throw new MfException('File '.LI_APP.'/model/'.$class_name.'.php for model '.$class_name.' doesn\'t exist');
         }
         require_once LI_APP.'/model/'.$class_name.'.php';
     }

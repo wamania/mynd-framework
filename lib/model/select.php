@@ -1,6 +1,6 @@
 <?php
 
-class LiSimpleSelect
+class MfSimpleSelect
 {
 	protected $db;
 	

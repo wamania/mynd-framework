@@ -1,6 +1,6 @@
 <?php
 
-class LiFakecache
+class MfFakecache
 {
 	public function __construct()
 	{

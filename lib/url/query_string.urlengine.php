@@ -1,5 +1,5 @@
 <?php
-class LiQuerystringUrl extends LiParamString implements iUrlEngine {
+class MfQuerystringUrl extends MfParamString implements iUrlEngine {
 
     public function path2url($path, $domain = null) {
     	

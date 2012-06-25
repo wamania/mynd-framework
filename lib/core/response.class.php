@@ -2,7 +2,7 @@
 /**
  * 
  */
-class LiResponse {
+class MfResponse {
 	
 	public $headers;
 	

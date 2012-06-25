@@ -1,6 +1,6 @@
 <?php
 
-class LiRequest {
+class MfRequest {
 	
 	private $pathinfo;
 	
@@ -49,7 +49,7 @@ class LiRequest {
 			throw new Exception ('Impossible de trouver un support pour ce type d\'url');
 		}
 
-		$urlEngineClassName = 'Li'.ucwords(_c('url_handler')).'Url';
+		$urlEngineClassName = 'Mf'.ucwords(_c('url_handler')).'Url';
 		try {
     		$urlEngine = new $urlEngineClassName;
     		$this->params = $urlEngine->url2params($this->pathinfo, $_GET);
@@ -64,7 +64,7 @@ class LiRequest {
 		$this->params = array_merge($this->params, $_POST);
 		
 		// On stocke les paramètres dans le registre
-		LiRegistery::set('params', $this->params); 
+		MfRegistery::set('params', $this->params); 
 	}
 	
 	public function &getParams() 

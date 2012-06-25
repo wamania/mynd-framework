@@ -36,7 +36,7 @@
  * @link       http://www.wamania.com
  * @since      Class available since Release 0.1
  */
-abstract class LiAssociationAbstract extends LiSqlQuery 
+abstract class MfAssociationAbstract extends MfSqlQuery 
 {
     /**
      * Contient les info de l'association
@@ -75,22 +75,22 @@ abstract class LiAssociationAbstract extends LiSqlQuery
         switch($assoc['type']) {
             
             case 'hasmany':
-                return LiAssociationHasMany::load($parent, $assoc);
+                return MfAssociationHasMany::load($parent, $assoc);
                 break;
                 
             case 'manytomany':
-                return LiAssociationManyToMany::load($parent, $assoc);
+                return MfAssociationManyToMany::load($parent, $assoc);
                 break;
                 
             case 'belongsto':
-                return LiAssociationBelongsTo::load($parent, $assoc);
+                return MfAssociationBelongsTo::load($parent, $assoc);
                 break;
                 
             case 'hasone':
-                return LiAssociationHasOne::load($parent, $assoc);
+                return MfAssociationHasOne::load($parent, $assoc);
                 break;
             default:
-                throw new LiException ('Association inconnue');
+                throw new MfException ('Association inconnue');
                 break;
         }
     }

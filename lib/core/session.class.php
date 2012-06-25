@@ -2,7 +2,7 @@
 /**
  * Classe de session simple
  */
-class LiPHPSession implements ArrayAccess 
+class MfPHPSession implements ArrayAccess 
 {
 	public function start()
 	{

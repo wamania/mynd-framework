@@ -4,15 +4,15 @@
 
 /*function exception_handler($e) {
 	try {
-		throw new LiException($e->getMessage(), $e->getCode());
+		throw new MfException($e->getMessage(), $e->getCode());
 	
-	} catch (LiException $ye) {
+	} catch (MfException $ye) {
 		$ye->noCatchedException($e);
 		echo $ye->out();
 	}
 }*/
 
-class LiException extends Exception {
+class MfException extends Exception {
 	
 	private $originalException;
 	

@@ -1,6 +1,6 @@
 <?php
 
-abstract class LiParamString implements iUrlEngine {
+abstract class MfParamString implements iUrlEngine {
     
     public function url2params($url, $get) {
         $routes = _r('routes');

@@ -1,6 +1,6 @@
 <?php
 
-class LiModrewriteUrl extends LiParamString implements iUrlEngine {
+class MfModrewriteUrl extends MfParamString implements iUrlEngine {
 	
     public function path2url($path, $domain = null) {
     	

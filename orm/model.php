@@ -37,7 +37,7 @@
  * @link       http://www.wamania.com
  * @since      Class available since Release 0.1
  */
-class LiModel 
+class MfModel 
 {
     /**
      * Tableau contenant les données

@@ -30,7 +30,7 @@
  * @link       http://www.wamania.com
  * @since      Class available since Release 0.1
  */
-class LiAssociationHasOne extends LiAssociationAbstract 
+class MfAssociationHasOne extends MfAssociationAbstract 
 {
     
     private $fk;

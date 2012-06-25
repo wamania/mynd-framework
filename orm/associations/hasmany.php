@@ -30,7 +30,7 @@
  * @link       http://www.wamania.com
  * @since      Class available since Release 0.1
  */
-class LiAssociationHasMany extends LiAssociationAbstract 
+class MfAssociationHasMany extends MfAssociationAbstract 
 {
     /**
      * Tableau des objects à ajouter

@@ -24,13 +24,13 @@
  *
  * @copyright  2008 Wamania.com
  * @license    http://creativecommons.org/licenses/by/2.0/fr/
- * @package    Lithium
+ * @package    Mynd Framework
  * @subpackage ORM
  * @version    Release: @package_version@
  * @link       http://www.wamania.com
  * @since      Class available since Release 0.1
  */
-class LiDb
+class MfDb
 {
 	/**
 	 * Connexion DSN
@@ -90,12 +90,12 @@ class LiDb
 	/**
 	 * Create PDO Object
 	 * @return void
-	 * @throw LiException
+	 * @throw MfException
 	 */
 	public function connect()
 	{
 		if ( (empty($this->dsn)) || (empty($this->user)) || (empty($this->pass)) ) {
-			throw new LiException('You must give the access codes to the database');
+			throw new MfException('You must give the access codes to the database');
 		}
 
 		try {
@@ -108,8 +108,8 @@ class LiDb
 			$this->pdo->setAttribute( PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC );
 
 		} catch(PDOExcetpion $e) {
-			//throw new LiException($e->getMessage());
-			echo 'Echec connexion PDO : '.$e->getMessage()."\n<br />";
+			throw new LiException('Echec connexion PDO : '.$e->getMessage());
+			//echo 'Echec connexion PDO : '.$e->getMessage()."\n<br />";
 		}
 	}
 

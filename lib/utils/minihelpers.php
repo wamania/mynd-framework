@@ -24,7 +24,7 @@ function _a ($name, $selector, $params=array(), $options=array()) {
 		$params['action'] = $tabSelector[1];
 	}
 	
-	return LiHelper::link($name, $params, $options);
+	return MfHelper::link($name, $params, $options);
 }
 
 function _selector($query, $requestParams = array())
@@ -85,7 +85,7 @@ function _selector($query, $requestParams = array())
 
 function _paginate($paginator, $params, $options=array())
 {
-	return LiHelper::paginate($paginator, $params, $options=array());
+	return MfHelper::paginate($paginator, $params, $options=array());
 }
 
 /**
@@ -101,7 +101,7 @@ function _url($params)
 function _urlToDomain($domain, $params)
 {
 	if (is_array($params)) {
-		return LiHelper::urlTodomain($domain, $params);
+		return MfHelper::urlTodomain($domain, $params);
 		
 	} elseif (is_string($params)) {
 		// si c'est simplement une url...
@@ -109,7 +109,7 @@ function _urlToDomain($domain, $params)
 			return $params;
 		}
 		
-		return LiHelper::urlTodomain($domain, _selector($params));
+		return MfHelper::urlTodomain($domain, _selector($params));
 	}
 }
 
@@ -125,7 +125,7 @@ function _urlize($string)
  */
 function _r($key) 
 {
-	return LiRegistery::get($key);
+	return MfRegistery::get($key);
 }
 
 /**
@@ -135,7 +135,7 @@ function _r($key)
  */
 function _c($key) 
 {
-	$cfg = LiRegistery::get('config');
+	$cfg = MfRegistery::get('config');
 	if (is_array($cfg)) {
 		if (isset($cfg[$key])) {
 			return $cfg[$key];

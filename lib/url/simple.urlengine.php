@@ -1,6 +1,6 @@
 <?php
 
-class LiSimpleUrl implements iUrlEngine {
+class MfSimpleUrl implements iUrlEngine {
 
 	public function url2params($url, $get) {
 

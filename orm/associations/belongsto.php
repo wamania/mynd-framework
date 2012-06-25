@@ -30,7 +30,7 @@
  * @link       http://www.wamania.com
  * @since      Class available since Release 0.1
  */
-class LiAssociationBelongsTo extends LiAssociationAbstract 
+class MfAssociationBelongsTo extends MfAssociationAbstract 
 {
     /**
      * On utilise une variable indépendante car si on tente d'accèder
