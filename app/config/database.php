@@ -6,7 +6,7 @@ $config = array
     (
         'dsn' => 'mysql:host=localhost;dbname=lithium',
 		'user' => 'root',
-		'pass' => 'equinoxe2007'
+		'pass' => 'meuhmeuh'
     ),
     'production' => array
     (

@@ -49,15 +49,15 @@ abstract class LiParamString implements iUrlEngine {
     
     public function params2path($params) {
 
-        if (empty($params['controller'])) {
-            $params['controller'] = _c('default_controller');
-        }
-        if (empty($params['action'])) {
-             $params['action'] = _c('default_action');
-        }
-        if (empty($params['module'])) {
-        	$params['module'] = null;
-        }
+    	if (empty($params['controller'])) {
+    		$params['controller'] = _c('default_controller');
+    	}
+    	if (empty($params['action'])) {
+    		$params['action'] = _c('default_action');
+    	}
+    	if (empty($params['module'])) {
+    		$params['module'] = _c('default_module');
+    	}
 
         $routes = _r('routes');
         $url = null;

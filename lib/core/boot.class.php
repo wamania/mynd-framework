@@ -19,10 +19,17 @@ class LiBoot
 		}
 		LiRegistery::set('environment', $environment);
 
-		/**
-		 * On charge la condif générale
-		 */
+		// configuration du site
 		LiRegistery::load('config', LI_APP.'config/config.php');
+		
+		// configuration par default
+		LiRegistery::setAndMerge('config', array(
+			'default_module' => 'default',
+			'default_controller' => 'default',
+			'default_action' => 'index'
+		));
+		
+		
 		LiRegistery::load('routes', LI_APP.'config/routes.php');
 
 		$db_config = array();

@@ -182,12 +182,6 @@ function _frDateToMySQL($date)
 	return $oDate->format('%F');
 }
 
-/*function _paginate($query, $params, $per_page=10, $size=3) {
-	$paginator = new SPaginator($query, $per_page, 1, 'page');
-	
-	return LiHelper::paginate($paginator, $params, $options=array('size'=>$size));
-}*/
-
 function public_path() 
 {
 	return str_replace('index.php', '', $_SERVER['SCRIPT_NAME']).LI_APP_NAME.'public';
@@ -224,9 +218,4 @@ function _jspath($path)
 function _js($path) 
 {
 	return '<script type="text/javascript" src="'._jspath($path).'"></script>';
-}
-
-function _flash($path) 
-{
-	return public_path().'/flash/'.$path;
 }

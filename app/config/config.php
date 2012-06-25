@@ -25,16 +25,7 @@ $config = array
 		'url_handler' => 'modrewrite',
 	
 		// 'orm', 'simple'
-		'model' => 'orm',
-		
-		// Routes par défaut
-		'default_module' => 'default',
-		'default_controller' => 'default',
-		'default_action' => 'index',
-		
-		'cache' => 'fakecache',
-		'cache_options' => array(
-		)
+		'model' => 'orm'
 	),
 	'production' => array
 	(
@@ -43,11 +34,6 @@ $config = array
 	
 		// 'orm', 'simple'
 		'model' => 'orm',
-		
-		// Routes par défaut
-		'default_module' => 'default',
-		'default_controller' => 'default',
-		'default_action' => 'index',
 		
 		'cache' => 'memcache',
 		'cache_options' => array(
