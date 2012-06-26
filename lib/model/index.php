@@ -24,7 +24,7 @@
 
 //require_once LI_LIB.'model/db.php';
 require_once LI_LIB.'model/model.php';
-//require_once LI_LIB.'database/select.php';
+require_once LI_LIB.'model/select.php';
 
 
 /**

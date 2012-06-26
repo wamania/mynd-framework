@@ -3,25 +3,52 @@ class MfSimpleModel
 {
     protected $db;
 
-    protected $table;
+    public static $table;
+
+    private static $cache;
 
     protected $data = array();
 
-    protected $pdo;
-
-    protected $cache;
-
     public static function select()
     {
-        //return LiSelect::find(strtolower(__CLASS__), $where);
+        $class = get_called_class();
+        $select = new MfSimpleSelect();
+
+        if (empty(static::$table)) {
+            static::$table = strtolower($class);
+        }
+
+        $select =  $select->from(static::$table, $class);
+        if (!empty($where)) {
+            $select = $select->where($where, $params);
+        }
+        return $select;
     }
 
-    public static function one()
+    public static function one($where, $params=null)
     {
+        $class = get_called_class();
+        $select = new MfSimpleSelect();
 
+        if (empty(static::$table)) {
+            static::$table = strtolower($class);
+        }
+
+        $select =  $select->from(static::$table, $class);
+        if (is_numeric($where)) {
+            $select = $select->where("id=".$where);
+        } else {
+            if (!is_array($params)) {
+                $params = array($params);
+            }
+            $select = $select->where($where, $params);
+        }
+        $current = $select->current();
+        if (empty($current)) {
+            return null;
+        }
+        return $current;
     }
-
-    //protected $cache;
 
     public function __construct($id = null)
     {
@@ -32,14 +59,13 @@ class MfSimpleModel
     {
         $this->db = _r('db');
 
-        $this->table = strtolower(__CLASS__);
+        if (empty(static::$table)) {
+            static::$table = strtolower(__CLASS__);
+        }
 
         if ( ! is_null($id)) {
             $this->load($id);
         }
-
-        // @deprecated
-        $this->pdo = $this->db->getPdo();
 
         // cache
         $cache = _c('cache');
@@ -69,13 +95,13 @@ class MfSimpleModel
 
     public function load($id)
     {
-        $s = $this->db->prepare("SELECT * FROM ".$this->table." WHERE id = ?");
+        $s = $this->db->prepare("SELECT * FROM ".static::$table." WHERE id = ?");
         $s->execute(array($id));
 
-        $this->fromArray($s->fetch());
+        $this->inject($s->fetch());
     }
 
-    public function fromArray(array $array)
+    public function inject(array $array)
     {
         if (is_array($array)) {
             foreach ($array as $key => $value) {
@@ -84,74 +110,57 @@ class MfSimpleModel
         }
     }
 
-    /*public function update(array $bind)
-     {
-    if (empty($this->id)) {
-    return false;
-    }
-
-    $set = array();
-    $i = 0;
-    foreach ($bind as $col => $val) {
-    unset($bind[$col]);
-    $bind[':col'.$i] = $val;
-    $val = ':col'.$i;
-    $i++;
-    $set[] = $this->quoteIdentifier($col, true) . ' = ' . $val;
-    }
-
-    $bind[':id'] = $this->id;
-
-    $sql = "UPDATE "
-    . $this->quoteIdentifier($table, true)
-    . ' SET ' . implode(', ', $set)
-    . " WHERE id = :id";
-
-    $stmt = $this->query($sql, $bind);
-    $result = $stmt->rowCount();
-    return $result;
-    }
-
-    public function insert(array $bind)
+    public function save(array $array)
     {
-    // extract and quote col names from the array keys
-    $cols = array();
-    $vals = array();
-    $i = 0;
-    foreach ($bind as $col => $val) {
-    $cols[] = $this->quoteIdentifier($col, true);
-    unset($bind[$col]);
-    $bind[':col'.$i] = $val;
-    $vals[] = ':col'.$i;
-    $i++;
-    }
+        if (!empty($array)) {
+            $this->inject($array);
+        }
+        $columns = $this->queryColumns();
 
-    // build the statement
-    $sql = "INSERT INTO "
-    . $this->quoteIdentifier($table, true)
-    . ' (' . implode(', ', $cols) . ') '
-    . 'VALUES (' . implode(', ', $vals) . ')';
+        // insert
+        if (empty($this->id)) {
+            $cols = array();
+            $vals = array();
+            $params = array();
 
-    // execute the statement and return the number of affected rows
-    $stmt = $this->query($sql, $bind);
-    $result = $stmt->rowCount();
-    return $result;
+            foreach ($columns as $c) {
+                if (isset($this->{$c})) {
+                    $cols[] = $c;
+                    $vals[] = ':'.$c;
+                    $params[':'.$c] = $this->{$c};
+                }
+            }
+            $sql = "INSERT INTO " . static::$table . ' (' . implode(', ', $cols) . ') ' . 'VALUES (' . implode(', ', $vals) . ')';
+            $s = $this->db->prepare($sql);
+            return $s->execute($params);
+
+            // update
+        } else {
+            $set = array();
+            $params = array();
+
+            foreach ($columns as $c) {
+                if (isset($this->{$c})) {
+                    $set[] = $c.'=:'.$c;
+                    $params[':'.$c] = $this->{$c};
+                }
+            }
+            $sql = "UPDATE " . static::$table . ' SET ' . implode(', ', $set) . " WHERE id = :id";
+            $s = $this->db->prepare($sql);
+            return $s->execute($params);
+        }
     }
 
     public function delete()
     {
-    if (empty($this->id)) {
-    return false;
+        if (!empty($this->id)) {
+            $sql = "DELETE FROM " . static::$table . " WHERE id = ?";
+            $s = $this->db->prepare($sql);
+            return $s->execute(array($this->id));
+        }
+
+        return false;
     }
-
-    $sql = "DELETE FROM "
-    . $this->quoteIdentifier($table, true)
-    . " WHERE id = :id";
-
-    $stmt = $this->query($sql, array(':id' => $this->id));
-    $result = $stmt->rowCount();
-    return $result;
-    }*/
 
     public function __get($key)
     {
@@ -174,5 +183,30 @@ class MfSimpleModel
     public function getDatas()
     {
         return $this->data;
+    }
+
+    /**
+     * Show columns of current table
+     *
+     * @return Array
+     */
+    public function queryColumns()
+    {
+        if (empty(self::$cache[$this->table])) {
+
+            $s = $this->db->query("SHOW COLUMNS FROM " . static::$table);
+            if ($s->rowCount() <= 0) {
+                throw new LiException ('La table ' . $table . ' ne contient aucune colonne');
+            }
+            $rs = $s->fetchAll();
+            $fields = array();
+            foreach ($rs as $row) {
+                $fields[] = $row['Field'];
+            }
+
+            self::$cache[static::$table] = $fields;
+        }
+
+        return self::$cache[static::$table];
     }
 }

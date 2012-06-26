@@ -217,5 +217,5 @@ function _jspath($path)
 
 function _js($path)
 {
-    return '<script type="text/javascript" src="'._jspath($path).'"></script>';
+    return '<script src="'._jspath($path).'"></script>';
 }
