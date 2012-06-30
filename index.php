@@ -11,6 +11,8 @@ define ('LI_APP',    LI_ROOT.LI_APP_NAME);
 
 define ('LI_LIB',     LI_ROOT.'/lib/');
 
+define ('MF_WORKSPACE', '/home/wamania/extern/www/');
+
 // Librairie du framework
 require_once LI_LIB.'index.php';
 
@@ -22,5 +24,4 @@ require_once LI_LIB.'index.php';
  * Récupèration du contrôleur, de l'action et des paramétres
  * Puis, lancement de l'action
  */
-
 MfBoot::init();

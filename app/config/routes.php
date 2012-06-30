@@ -1,7 +1,7 @@
 <?php
 
 $routes = array(
-	
+
 	/********************************************************
 	 *  Routes pour Auth
 	 ********************************************************/
@@ -13,7 +13,7 @@ $routes = array(
 			'action' => 'login'
 		)
 	),
-	
+
 	array(
 		'url' => '/logout',
 		'params' => array(
@@ -22,7 +22,7 @@ $routes = array(
 			'action' => 'logout'
 		)
 	),
-	
+
 	array(
 		'url' => '/register',
 		'params' => array(
@@ -31,7 +31,7 @@ $routes = array(
 			'action' => 'register'
 		)
 	),
-	
+
 	/********************************************************
 	 * Routes par défaut
 	 ********************************************************/
@@ -44,7 +44,7 @@ $routes = array(
 			'id' 		=> '[0-9]+'
 		)
 	),
-		
+
 	array(
 		'url' => '/:module/:controller/:action',
 		'params' => array(
@@ -53,7 +53,7 @@ $routes = array(
 			'action'	=> '[a-zA-Z0-9\-]+'
 		)
 	),
-	
+
 	array(
 		'url' => '/:controller/:action',
 		'params' => array(
@@ -62,16 +62,16 @@ $routes = array(
 			'action'	=> '[a-zA-Z0-9\-]+',
 		)
 	),
-	
+
 	array(
-		'url' => '/:module', 
+		'url' => '/:module',
 		'params' => array(
 			'module' 	=> '[a-zA-Z0-9\-]+',
 			'controller'=> _c('default_controller'),
 			'action'	=> _c('default_action'),
 		)
 	),
-		
+
 	array(
 		'url' => '/',
 		'params' => array(
@@ -83,4 +83,3 @@ $routes = array(
 );
 
 return $routes;
-?>

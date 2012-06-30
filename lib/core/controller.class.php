@@ -70,9 +70,9 @@ abstract class MfController {
      * Enter description here ...
      * @var array
      */
-    protected $errors;
+    protected $jsErrors;
 
-    protected $success;
+    protected $jsSuccess;
 
     protected $cache = null;
 
@@ -97,8 +97,8 @@ abstract class MfController {
 
         $this->response = $response;
 
-        $this->errors = array();
-        $this->success = array();
+        $this->jsErrors = array();
+        $this->jsSuccess = array();
 
         $this->notifier = null;
         $this->nextParams = null;
@@ -182,12 +182,12 @@ abstract class MfController {
 
     protected function jsError($msg = null)
     {
-        $this->errors[] = $msg;
+        $this->jsErrors[] = $msg;
     }
 
     protected function jsSuccess($msg = null, $datas = array())
     {
-        $this->success[] = array('msg' => $msg, 'datas' => $datas);
+        $this->jsSuccess[] = array('msg' => $msg, 'datas' => $datas);
     }
 
     public function Getparam($index, $default = null)
@@ -210,22 +210,22 @@ abstract class MfController {
     public function render_action($template = null) {
 
         // On envoi les erreurs au js
-        if ( ! empty($this->errors)) {
+        if ( ! empty($this->jsErrors)) {
             $render = new stdClass();
             $render->code = 'error';
-            $render->msg = implode('<br />', $this->errors);
+            $render->msg = implode('<br />', $this->jsErrors);
             $this->render_text(json_encode($render));
             return true;
         }
 
         // on envoi le success au js
-        if ( ! empty($this->success)) {
+        if ( ! empty($this->jsSuccess)) {
             $render = new stdClass();
             $render->code = 'success';
-            	
+
             $msgs = array();
             $datas = array();
-            foreach ($this->success as $s) {
+            foreach ($this->jsSuccess as $s) {
                 $msgs[] = $s['msg'];
                 $datas = array_merge($datas, $s['datas']);
             }
@@ -237,18 +237,11 @@ abstract class MfController {
 
         if (is_null($template)) {
             $template = array(
-                    'module' => $this->params['module'],
-                    'controller' => $this->params['controller'],
-                    'action' => $this->params['action']
-            );
-        }
-
-        //$template = LI_APP.'modules/'.$this->params['module'].'/view/'.$this->params['controller'].'/'.$template.'.php';
-        /*$template = array(
                 'module' => $this->params['module'],
                 'controller' => $this->params['controller'],
-                'action' => $template
-        );*/
+                'action' => $this->params['action']
+            );
+        }
 
         $layout_name = null;
         if (array_key_exists($this->params['action'], $this->actions_with_layout)) {
@@ -261,10 +254,9 @@ abstract class MfController {
         if (!is_null($layout_name)) {
             $this->data['layout_content'] = $body = $this->view->render($template, $this->data);
 
-            //$layout = LI_APP.'modules/'.$this->params['module'].'/view/layout/'.$layout_name.'.php';
             $layout = _selector($layout_name, array(
-                    'module' => $this->params['module'],
-                    'controller' => 'layout')
+                'module' => $this->params['module'],
+                'controller' => 'layout')
             );
 
             //$body = $this->render_getfilecontent($layout);
@@ -320,17 +312,17 @@ abstract class MfController {
                     $mimetype = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
                     $force = false;
                     break;
-                    	
+
                 case 'xlsx':
                     $mimetype = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
                     $force = false;
                     break;
-                    	
+
                 case 'pptx':
                     $mimetype = 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
                     $force = false;
                     break;
-                    	
+
                 case 'ppsx':
                     $mimetype = 'application/vnd.openxmlformats-officedocument.presentationml.slideshow';
                     $force = false;
@@ -387,10 +379,9 @@ abstract class MfController {
         }
         // Variable local car la méthode magique __set interdit l'utilisation de tableau 2D
         $history = $this->session['history'];
-        $history_diff = array_diff_assoc(_r('params'), $history['current']);
-        if ( ! empty($history_diff)) {
-            $this->session['history'] = array('current'=>_r('params'), 'last'=>$history['current']);
-            	
+        //$history_diff = array_diff_assoc(_r('params'), $history['current']);
+        if ( _r('params') !== $history['current']) {
+            $this->session['history'] = array('current' => _r('params'), 'last' => $history['current']);
         }
 
         // appel de init dans le controller, s'applique à toutes les actions
@@ -413,7 +404,7 @@ abstract class MfController {
 
         // Notre action principale
         if ( ! method_exists($this, $action)) {
-            	
+
             throw new Exception ('Action '.$action.'introuvable');
         }
         $this->$action();

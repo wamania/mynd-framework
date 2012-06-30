@@ -67,8 +67,8 @@ class MfView
 
         if ( ! is_array($template)) {
             $template = _selector($template, array(
-                    'module'=>$this->params['module'],
-                    'controller'=> $this->params['controller']
+                'module'=>$this->params['module'],
+                'controller'=> $this->params['controller']
             ));
         }
 
@@ -87,8 +87,8 @@ class MfView
     public function render_partial( $template, $data = array() ) {
 
         $template = _selector($template, array(
-                'module'=>$this->params['module'],
-                'controller'=> $this->params['controller']
+            'module'=>$this->params['module'],
+            'controller'=> $this->params['controller']
         ));
         $template['action'] = '_'.$template['action'];
 

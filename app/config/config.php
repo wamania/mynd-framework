@@ -5,16 +5,16 @@ $config = array
 	'development' => array
 	(
 		// 'modrewrite', 'multiviews', 'querystring', 'simple'
-		'url_handler' => 'simple',
-	
+		'url_handler' => 'modrewrite',
+
 		// 'orm', 'simple'
 		'model' => 'simple',
-		
+
 		// Routes par défaut
 		'default_module' => 'generator',
 		/*'default_controller' => 'default',
 		'default_action' => 'index',
-		
+
 		'cache' => 'fakecache',
 		'cache_options' => array(
 		)*/
@@ -23,7 +23,7 @@ $config = array
 	(
 		// Possibles are : 'modrewrite', 'multiviews', 'querystring', 'simple'
 		'url_handler' => 'modrewrite',
-	
+
 		// 'orm', 'simple'
 		'model' => 'orm'
 	),
@@ -32,11 +32,11 @@ $config = array
 		// Possibles are : 'modrewrite', 'multiviews', 'querystring', 'simple'
 		//'url_handler' => 'modrewrite',
 		'url_handler' => 'simple',
-	
+
 		// 'orm', 'simple'
 		//'model' => 'orm',
 		'model' => 'simple',
-		
+
 		/*'cache' => 'memcache',
 		'cache_options' => array(
 			'servers' => array(
@@ -48,5 +48,3 @@ $config = array
 );
 
 return $config[_r('environment')];
-
-?>

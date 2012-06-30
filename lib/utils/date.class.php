@@ -1,9 +1,5 @@
 <?php
 
-class SDateException extends Exception {}
-class SDateConstructException extends Exception {}
-class SDateParsingException extends Exception {}
-
 class SDate
 {
     protected $attributes = array();

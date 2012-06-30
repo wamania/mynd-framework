@@ -4,7 +4,6 @@
  */
 class MfBoot
 {
-
     /**
      * Le dispatcher qui va lancer l'action en fonction des paramètres
      * @return void
@@ -44,11 +43,12 @@ class MfBoot
             if ( ( ! empty($db_config['dsn'])) && ( ! empty($db_config['user'])) && ( ! empty($db_config['pass'])) ) {
                 MfRegistery::set('db', new MfDb($db_config['dsn'], $db_config['user'], $db_config['pass']));
 
-                if (_c('model') == 'orm') {
-                    spl_autoload_register(array('MfInitOrm', 'includeModel'));
-
-                } elseif (_c('model') == 'simple') {
+                $model = _c('model');
+                if ( (empty($model)) || ($model == 'simple') ) {
                     spl_autoload_register(array('MfInitSimpleModel', 'includeModel'));
+
+                } elseif ($model == 'orm') {
+                    spl_autoload_register(array('MfInitOrm', 'includeModel'));
                 }
             }
         }

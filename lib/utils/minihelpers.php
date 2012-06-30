@@ -11,7 +11,7 @@
  * @param $params Array[optional]
  * @params $options Array[optional]
  */
-function _a ($name, $selector, $params=array(), $options=array())
+/*function _a ($name, $selector, $params=array(), $options=array())
 {
     if (is_array($selector)) {
         $params = array_merge($params, $selector);
@@ -25,62 +25,11 @@ function _a ($name, $selector, $params=array(), $options=array())
     }
 
     return MfHelper::link($name, $params, $options);
-}
+}*/
 
 function _selector($query, $requestParams = array())
 {
-    // sous la forme complet :    module:controller:action|id=8;user_id=9
-    $tabQuery = explode('|', $query);
-
-    if ( empty($tabQuery[0])) {
-        throw new Exception('Mauvais selecteur dans le lien '.$params);
-    }
-
-    if (empty($requestParams['module'])) {
-        $requestParams['module'] = _c('default_module');
-    }
-    if (empty($requestParams['controller'])) {
-        $requestParams['controller'] = _c('default_controller');
-    }
-
-    $tabParams = explode(':', $tabQuery[0]);
-    $params = array();
-
-    if (count($tabParams) == 1) {
-        $params['module'] = $requestParams['module']; // retrocompatibilité
-        $params['controller'] = $requestParams['controller'];
-        $params['action'] = $tabParams[0];
-        //$url = _url($params);
-
-    } elseif (count($tabParams) == 2) {
-        $params['module'] = $requestParams['module']; // retrocompatibilité
-        $params['controller'] = $tabParams[0];
-        $params['action'] = $tabParams[1];
-        //$url = _url($params);
-
-    } elseif (count($tabParams) == 3) {
-        $params['module'] =  $tabParams[0];
-        $params['controller'] = $tabParams[1];
-        $params['action'] = $tabParams[2];
-        //$url = _url($params);
-
-    } else {
-        throw new Exception('Mauvais selecteur dans le lien');
-    }
-
-    if (!empty($tabQuery[1])) {
-        $tabVars = explode(';', $tabQuery[1]);
-        if (!empty($tabVars)) {
-            foreach ($tabVars as $var) {
-                $tabVar = explode ('=', $var);
-                if ( ($tabVar[0] != 'module') && ($tabVar[0] != 'controller') && ($tabVar[0] != 'action') ) {
-                    $params[$tabVar[0]] = $tabVar[1];
-                }
-            }
-        }
-    }
-
-    return $params;
+    return MfHelper::selector($query, $requestParams);
 }
 
 function _paginate($paginator, $params, $options=array())
@@ -113,6 +62,10 @@ function _urlToDomain($domain, $params)
     }
 }
 
+/**
+ * TODO : gestion des accents
+ * @param unknown_type $string
+ */
 function _urlize($string)
 {
     return preg_replace('#([^0-9a-zA-Z\.])#', '-', $string);
@@ -181,41 +134,40 @@ function _frDateToMySQL($date)
     $oDate = new SDate($tabDate[2], $tabDate[1], $tabDate[0]);
     return $oDate->format('%F');
 }
-
-function public_path()
+function rootPath()
 {
-    return str_replace('index.php', '', $_SERVER['SCRIPT_NAME']).LI_APP_NAME.'public';
+    return str_replace('index.php', '', $_SERVER['SCRIPT_NAME']);
 }
-function files_path()
+function wwwPath()
 {
-    return str_replace('index.php', '', $_SERVER['SCRIPT_NAME']).'files';
+    return rootPath().'www';
 }
 function _img($path)
 {
-    return public_path().'/images/'.$path;
+    return wwwPath().'/images/'.$path;
 }
 
-function _csspath($path)
+function _cssPath($path)
 {
-    return public_path().'/styles/'.$path;
+    return wwwPath().'/css/'.$path;
 }
 
 function _css($path)
 {
-    return '<link rel="stylesheet" href="'._csspath($path).'" media="all"/>';
+    return '<link rel="stylesheet" href="'._cssPath($path).'" media="all"/>';
 }
 
 function _file($path)
 {
-    return files_path().'/'.$path;
+    return wwwPath().'/files/'.$path;
 }
 
-function _jspath($path)
+function _jsPath($path)
 {
-    return public_path().'/scripts/'.$path;
+    return wwwPath().'/js/'.$path;
 }
 
 function _js($path)
 {
-    return '<script src="'._jspath($path).'"></script>';
+    return '<script src="'._jsPath($path).'"></script>';
 }

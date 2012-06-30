@@ -24,5 +24,3 @@ $config = array
 
 
 return $config[_r('environment')];
-
-?>

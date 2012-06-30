@@ -10,7 +10,7 @@ class MfHelper
      * @param $params Object
      * @param $options Object[optional]
      */
-    public static function link($name, $params, $options=array()) {
+    /*public static function link($name, $params, $options=array()) {
 
         $url = self::url($params);
 
@@ -28,6 +28,62 @@ class MfHelper
         $link .= ' >'.$name.'</a>';
 
         return $link;
+    }*/
+
+    public static function selector($query, $requestParams = array())
+    {
+        // sous la forme complet :    module:controller:action|id=8&user_id=9
+        $tabQuery = explode('|', $query);
+
+        if ( empty($tabQuery[0])) {
+            throw new Exception('Mauvais selecteur dans le lien '.$params);
+        }
+
+        if (empty($requestParams['module'])) {
+            $requestParams['module'] = _c('default_module');
+        }
+        if (empty($requestParams['controller'])) {
+            $requestParams['controller'] = _c('default_controller');
+        }
+
+        $tabParams = explode(':', $tabQuery[0]);
+        $params = array();
+
+        if (count($tabParams) == 1) {
+            $params['module'] = $requestParams['module']; // retrocompatibilité
+            $params['controller'] = $requestParams['controller'];
+            $params['action'] = $tabParams[0];
+            //$url = _url($params);
+
+        } elseif (count($tabParams) == 2) {
+            $params['module'] = $requestParams['module']; // retrocompatibilité
+            $params['controller'] = $tabParams[0];
+            $params['action'] = $tabParams[1];
+            //$url = _url($params);
+
+        } elseif (count($tabParams) == 3) {
+            $params['module'] =  $tabParams[0];
+            $params['controller'] = $tabParams[1];
+            $params['action'] = $tabParams[2];
+            //$url = _url($params);
+
+        } else {
+            throw new Exception('Mauvais selecteur dans le lien');
+        }
+
+        if (!empty($tabQuery[1])) {
+            $tabVars = explode('&', $tabQuery[1]);
+            if (!empty($tabVars)) {
+                foreach ($tabVars as $var) {
+                    $tabVar = explode ('=', $var);
+                    if ( ($tabVar[0] != 'module') && ($tabVar[0] != 'controller') && ($tabVar[0] != 'action') ) {
+                        $params[$tabVar[0]] = $tabVar[1];
+                    }
+                }
+            }
+        }
+
+        return $params;
     }
 
     /**
@@ -105,10 +161,12 @@ class MfHelper
      * be truncated to the length of <var>$length</var> and the last three characters
      * will be replaced with the <var>$truncate_string</var>.
      */
-    public function truncate($text, $length = 30, $truncate_string = '...') {
-        if (utf8_strlen($text) > $length)
+    public function truncate($text, $length = 30, $truncate_string = '...')
+    {
+        if (utf8_strlen($text) > $length) {
             return utf8_substr_replace($text, $truncate_string, $length - utf8_strlen($truncate_string));
-        else
+        } else {
             return $text;
+        }
     }
 }
