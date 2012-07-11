@@ -231,4 +231,32 @@ class MfSimpleSelect implements Iterator, Countable
         }
         return count($this->results);
     }
+
+    public function __toString()
+    {
+        $order = array();
+
+        if ( (!empty($this->orderBy)) && (is_array($this->orderBy)) ) {
+            foreach ($this->orderBy as $key => $value) {
+                $order[$key] = preg_replace('#\+([0-9a-zA-Z\-\_]+)#', '$1 ASC', $value);
+                $order[$key] = preg_replace('#\-([0-9a-zA-Z\-\_]+)#', '$1 DESC', $value);
+            }
+        }
+
+        $query = "SELECT * FROM " . $this->table;
+
+        if (!empty($this->where)) {
+            $query .= " WHERE " . implode(' AND ', $this->where);
+        }
+
+        if (! empty($this->orderBy)) {
+            $query .= " ORDER BY " . implode(',', $this->orderBy);
+        }
+
+        if (! empty($this->limitLength)) {
+            $query .= " LIMIT " . $this->limitOffset . "," . $this->limitLength;
+        }
+
+        return 'SQL => '.$query."\n<br>".'Params => '.print_r($this->params, true);
+    }
 }

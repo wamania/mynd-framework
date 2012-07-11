@@ -52,7 +52,7 @@ class MfSimpleModel
 
     public function __construct($id = null)
     {
-        $this->init();
+        $this->init($id);
     }
 
     public function init($id = null)
@@ -60,7 +60,7 @@ class MfSimpleModel
         $this->db = _r('db');
 
         if (empty(static::$table)) {
-            static::$table = strtolower(__CLASS__);
+            static::$table = strtolower(get_called_class());
         }
 
         if ( ! is_null($id)) {
@@ -68,7 +68,7 @@ class MfSimpleModel
         }
 
         // cache
-        $cache = _c('cache');
+        /*$cache = _c('cache');
         if (empty($cache)) {
             $cache = 'MfFakecache';
         } else {
@@ -80,7 +80,7 @@ class MfSimpleModel
         $cacheOptions = _c('cache_options');
         if (!empty($cacheOptions)) {
             $this->cache->setOptions($cacheOptions);
-        }
+        }*/
     }
 
     public function __sleep()
@@ -105,12 +105,12 @@ class MfSimpleModel
     {
         if (is_array($array)) {
             foreach ($array as $key => $value) {
-                $this->{$key} = $value;
+                $this->data[$key] = $value;
             }
         }
     }
 
-    public function save(array $array)
+    public function save(array $array = array())
     {
         if (!empty($array)) {
             $this->inject($array);
@@ -124,15 +124,19 @@ class MfSimpleModel
             $params = array();
 
             foreach ($columns as $c) {
-                if (isset($this->{$c})) {
+                if (isset($this->data[$c])) {
                     $cols[] = $c;
                     $vals[] = ':'.$c;
-                    $params[':'.$c] = $this->{$c};
+                    $params[':'.$c] = $this->data[$c];
                 }
             }
             $sql = "INSERT INTO " . static::$table . ' (' . implode(', ', $cols) . ') ' . 'VALUES (' . implode(', ', $vals) . ')';
             $s = $this->db->prepare($sql);
-            return $s->execute($params);
+            $check = $s->execute($params);
+
+            $this->id = $this->db->lastInsertId();
+
+            return $check;
 
             // update
         } else {
@@ -140,9 +144,9 @@ class MfSimpleModel
             $params = array();
 
             foreach ($columns as $c) {
-                if (isset($this->{$c})) {
+                if (isset($this->data[$c])) {
                     $set[] = $c.'=:'.$c;
-                    $params[':'.$c] = $this->{$c};
+                    $params[':'.$c] = $this->data[$c];
                 }
             }
             $sql = "UPDATE " . static::$table . ' SET ' . implode(', ', $set) . " WHERE id = :id";
@@ -192,7 +196,7 @@ class MfSimpleModel
      */
     public function queryColumns()
     {
-        if (empty(self::$cache[$this->table])) {
+        if (empty(self::$cache[static::$table])) {
 
             $s = $this->db->query("SHOW COLUMNS FROM " . static::$table);
             if ($s->rowCount() <= 0) {

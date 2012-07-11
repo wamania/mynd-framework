@@ -28,7 +28,6 @@ class MfBoot
             'default_action' => 'index'
         ), true);
 
-
         MfRegistery::load('routes', LI_APP.'config/routes.php');
 
         $db_config = array();
@@ -76,9 +75,9 @@ class MfBoot
         $response = self::launch($request);
 
         // la reponse est une requete, on la lance
-        if ($response instanceof MfRequest) {
+        /*if ($response instanceof MfRequest) {
             $response = self::launch($response);
-        }
+        }*/
 
         $response->out();
     }

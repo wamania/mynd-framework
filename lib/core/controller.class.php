@@ -85,8 +85,8 @@ abstract class MfController {
     /**
      * Constructeur
      */
-    public function __construct($request, $response) {
-
+    public function __construct($request, $response)
+    {
         $this->isRendered = false;
 
         $this->session = new MfPHPSession;
@@ -131,11 +131,13 @@ abstract class MfController {
     /**
      * Setter et getter
      */
-    public function __set($key, $value) {
+    public function __set($key, $value)
+    {
         $this->data[$key] = $value;
     }
 
-    public function __get($key) {
+    public function __get($key)
+    {
         if (isset($this->data[$key])) {
             return $this->data[$key];
         }
@@ -145,11 +147,13 @@ abstract class MfController {
     /**
      * Isset et unset
      */
-    public function __isset($key) {
+    public function __isset($key)
+    {
         return isset($this->data[$key]);
     }
 
-    public function __unset($key) {
+    public function __unset($key)
+    {
         unset($this->data[$key]);
     }
 

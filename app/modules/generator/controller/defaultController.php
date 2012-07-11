@@ -328,6 +328,19 @@ class defaultController extends mfController
             DIRECTORY_SEPARATOR . 'default' .
             DIRECTORY_SEPARATOR . 'index.php', $html);
 
+        // htaccess
+        if ($this->params['url_handler'] == 'modrewrite') {
+            file_put_contents($workspace .
+                DIRECTORY_SEPARATOR . $this->params['name'] .
+                DIRECTORY_SEPARATOR . '.htaccess', '<IfModule mod_rewrite.c>
+    RewriteEngine On
+    #RewriteBase /mynd-framework
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php?pathinfo=$1 [L,QSA]
+</IfModule>');
+        }
+
         copy(LI_ROOT . 'app' .
             DIRECTORY_SEPARATOR . 'www' .
             DIRECTORY_SEPARATOR . 'js' .
