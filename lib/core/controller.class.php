@@ -247,6 +247,7 @@ abstract class MfController {
             );
         }
 
+        // On cherche si ce template est contenu dans un layout
         $layout_name = null;
         if (array_key_exists($this->params['action'], $this->actions_with_layout)) {
             if (!is_null($this->actions_with_layout[$this->params['action']])) {
@@ -255,20 +256,18 @@ abstract class MfController {
         } elseif (array_key_exists('default', $this->actions_with_layout)) {
             $layout_name = $this->actions_with_layout['default'];
         }
+
+        // Gestion d'un layout
         if (!is_null($layout_name)) {
             $this->data['layout_content'] = $body = $this->view->render($template, $this->data);
-
-            $layout = _selector($layout_name, array(
-                'module' => $this->params['module'],
-                'controller' => 'layout')
-            );
-
-            //$body = $this->render_getfilecontent($layout);
+            $layout = array_merge(_selector($layout_name), array('controller' => 'layout'));
             $body = $this->view->render($layout, $this->data);
+
+        // no layout
         } else {
-            //$body = $this->render_getfilecontent($template);
             $body = $this->view->render($template, $this->data);
         }
+
         $this->finalize_render($body);
     }
 

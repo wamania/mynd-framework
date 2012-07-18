@@ -57,6 +57,7 @@ class MfBoot
         // à utiliser
         $request = new MfRequest();
         $params = &$request->getParams();
+        MfRegistery::set('params', $params);
         $config = MfRegistery::get('config');
 
         // On insère l'éventuel helper lié à notre application

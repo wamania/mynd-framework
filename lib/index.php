@@ -24,6 +24,7 @@ require_once LI_LIB.'url/multiviews.urlengine.php';
 require_once LI_LIB.'url/query_string.urlengine.php';
 require_once LI_LIB.'url/mod_rewrite.urlengine.php';
 require_once LI_LIB.'url/simple.urlengine.php';
+require_once LI_LIB.'url/helper.php';
 
 require_once LI_LIB.'database/index.php';
 require_once LI_LIB.'model/index.php';
