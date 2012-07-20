@@ -63,8 +63,11 @@ class MfDate
      * Use date() instead of Datetime::format() because date() use locales
      * @return string
      */
-    public function to_shortText()
+    public function to_shortText($onlyDate = false)
     {
+        if ($onlyDate) {
+            return strftime('%a %e %b %Y', $this->to_timestamp());
+        }
         return strftime('%a %e %b %Y %R', $this->to_timestamp());
     }
 
@@ -72,13 +75,19 @@ class MfDate
      * Use date() instead of Datetime::format() because date() use locales
      * @return string
      */
-    public function to_longText()
+    public function to_longText($onlyDate = false)
     {
+        if ($onlyDate) {
+            return strftime('%A %e %B %Y', $this->to_timestamp());
+        }
         return strftime('%A %e %B %Y %R', $this->to_timestamp());
     }
 
-    public function to_betterLocal()
+    public function to_betterLocal($onlyDate = false)
     {
+        if ($onlyDate) {
+            return strftime('%x', $this->to_timestamp());
+        }
         return strftime('%x %X', $this->to_timestamp());
     }
 }
