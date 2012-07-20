@@ -41,9 +41,3 @@ require_once LI_LIB.'cache/fake.class.php';
 require_once LI_LIB.'cache/memcache.class.php';
 
 require_once 'Zend/Mail.php';
-
-/**
- * Moteur ACL
- */
-//require_once LI_ACL.'controller/authController.php';
-?>

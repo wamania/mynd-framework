@@ -59,13 +59,26 @@ class MfDate
         return $this->datetime->format('U');
     }
 
-    public function to_shortTextLocal()
+    /**
+     * Use date() instead of Datetime::format() because date() use locales
+     * @return string
+     */
+    public function to_shortText()
     {
-        return date('D j M Y H:i:s', $this->to_timestamp());
+        return strftime('%a %e %b %Y %R', $this->to_timestamp());
     }
 
-    public function to_longTextLocal()
+    /**
+     * Use date() instead of Datetime::format() because date() use locales
+     * @return string
+     */
+    public function to_longText()
     {
-        return date('l j F Y H:i:s', $this->to_timestamp());
+        return strftime('%A %e %B %Y %R', $this->to_timestamp());
+    }
+
+    public function to_betterLocal()
+    {
+        return strftime('%x %X', $this->to_timestamp());
     }
 }
