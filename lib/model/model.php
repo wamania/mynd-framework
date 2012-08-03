@@ -50,12 +50,12 @@ class MfSimpleModel
         return $current;
     }
 
-    public function __construct($id = null)
+    public function __construct($params = null)
     {
-        $this->init($id);
+        $this->init($params);
     }
 
-    public function init($id = null)
+    public function init($params = null)
     {
         $this->db = _r('db');
 
@@ -63,24 +63,14 @@ class MfSimpleModel
             static::$table = strtolower(get_called_class());
         }
 
-        if ( ! is_null($id)) {
-            $this->load($id);
+        if ( ! is_null($params)) {
+            if (is_numeric($params)) {
+                $this->load($params);
+
+            } elseif (is_array($params)) {
+                $this->inject($params);
+            }
         }
-
-        // cache
-        /*$cache = _c('cache');
-        if (empty($cache)) {
-            $cache = 'MfFakecache';
-        } else {
-            $cache = 'Mf'.ucwords($cache);
-        }
-
-        $this->cache = new $cache;
-
-        $cacheOptions = _c('cache_options');
-        if (!empty($cacheOptions)) {
-            $this->cache->setOptions($cacheOptions);
-        }*/
     }
 
     public function __sleep()

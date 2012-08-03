@@ -59,6 +59,16 @@ class MfDate
         return $this->datetime->format('U');
     }
 
+    public function to_date()
+    {
+        return $this->datetime->format('Y-m-d');
+    }
+
+    public function to_datetime()
+    {
+        return $this->datetime->format('Y-m-d H:i:s');
+    }
+
     /**
      * Use date() instead of Datetime::format() because date() use locales
      * @return string

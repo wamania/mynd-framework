@@ -76,6 +76,8 @@ abstract class MfController {
 
     protected $cache = null;
 
+    protected $hasError = false;
+
     /**
      * Tableau des actions à afficher avec layout
      * @return
@@ -187,6 +189,7 @@ abstract class MfController {
     protected function jsError($msg = null)
     {
         $this->jsErrors[] = $msg;
+        $this->hasError = true;
     }
 
     protected function jsSuccess($msg = null, $datas = array())
