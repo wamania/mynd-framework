@@ -120,6 +120,12 @@ class MfSimpleModel
                     $params[':'.$c] = $this->data[$c];
                 }
             }
+            if (in_array('created_on', $columns)) {
+                $cols[] = 'created_on';
+                $vals[] = ':created_on';
+                $params[':created_on'] = date('Y-m-d H:i:s');
+            }
+
             $sql = "INSERT INTO " . static::$table . ' (' . implode(', ', $cols) . ') ' . 'VALUES (' . implode(', ', $vals) . ')';
             $s = $this->db->prepare($sql);
             $check = $s->execute($params);
@@ -138,6 +144,10 @@ class MfSimpleModel
                     $set[] = $c.'=:'.$c;
                     $params[':'.$c] = $this->data[$c];
                 }
+            }
+            if (in_array('updated_on', $columns)) {
+                $set[] = 'updated_on=:updated_on';
+                $params[':updated_on'] = date('Y-m-d H:i:s');
             }
             $sql = "UPDATE " . static::$table . ' SET ' . implode(', ', $set) . " WHERE id = :id";
             $s = $this->db->prepare($sql);
