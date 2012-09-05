@@ -147,6 +147,18 @@ class MfSimpleSelect implements Iterator, Countable
         $this->key = 0;
     }
 
+    public function remove()
+    {
+        $query = "DELETE FROM ".$this->table;
+
+        if (!empty($this->where)) {
+            $query .= " WHERE " . implode(' AND ', $this->where);
+        }
+
+        $s = $this->db->prepare($query);
+        return $s->execute($this->params);
+    }
+
     /**
      * Implémentation de la méthode rewind de l'interface Iterator
 
