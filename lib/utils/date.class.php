@@ -69,6 +69,11 @@ class MfDate
         return $this->datetime->format('Y-m-d H:i:s');
     }
 
+    public function to_frenchDate()
+    {
+        return $this->datetime->format('d/m/Y');
+    }
+
     /**
      * Use date() instead of Datetime::format() because date() use locales
      * @return string
@@ -99,5 +104,10 @@ class MfDate
             return strftime('%x', $this->to_timestamp());
         }
         return strftime('%x %X', $this->to_timestamp());
+    }
+
+    public function diff(mfDate $date)
+    {
+        return $this->to_timestamp() - $date->to_timestamp();
     }
 }

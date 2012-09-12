@@ -87,8 +87,11 @@ class MfSimpleModel
     {
         $s = $this->db->prepare("SELECT * FROM ".static::$table." WHERE id = ?");
         $s->execute(array($id));
+        $row = $s->fetch();
 
-        $this->inject($s->fetch());
+        if (is_array($row)) {
+            $this->inject($row);
+        }
     }
 
     public function inject(array $array)
@@ -120,7 +123,7 @@ class MfSimpleModel
                     $params[':'.$c] = $this->data[$c];
                 }
             }
-            if (in_array('created_on', $columns)) {
+            if ( (in_array('created_on', $columns)) && (!in_array('created_on', $cols)) ) {
                 $cols[] = 'created_on';
                 $vals[] = ':created_on';
                 $params[':created_on'] = date('Y-m-d H:i:s');
