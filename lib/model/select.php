@@ -113,6 +113,28 @@ class MfSimpleSelect implements Iterator, Countable
         return clone($this);
     }
 
+    public function paginate($page, $perPage)
+    {
+        // on commence par le count
+        $query = "SELECT COUNT(id) FROM ".$this->table;
+        if (!empty($this->where)) {
+            $query .= " WHERE " . implode(' AND ', $this->where);
+        }
+        $s = $this->db->prepare($query);
+        $s->execute($this->params);
+        $count = $s->fetchColumn();
+
+        $this->limit($perPage, ($page-1)*$perPage);
+
+        return array(
+            'perPage' => $perPage,
+            'page' => $page,
+            'count' => $count,
+            'page_count' => ceil($count/$perPage),
+            'results' => clone($this)
+        );
+    }
+
     public function execute()
     {
         if ( (!empty($this->orderBy)) && (is_array($this->orderBy)) ) {

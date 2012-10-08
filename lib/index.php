@@ -28,6 +28,7 @@ require_once LI_LIB.'url/helper.php';
 
 require_once LI_LIB.'database/index.php';
 require_once LI_LIB.'model/index.php';
+require_once LI_LIB.'html/index.php';
 
 /**
  *  Inclusion des utils
