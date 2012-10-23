@@ -2,7 +2,7 @@
 
 $config = array
 (
-	'development' => array
+	'local' => array
 	(
 		// 'modrewrite', 'multiviews', 'querystring', 'simple'
 		'url_handler' => 'modrewrite',
@@ -19,7 +19,7 @@ $config = array
 		'cache_options' => array(
 		)*/
 	),
-	'test' => array
+	'development' => array
 	(
 		// Possibles are : 'modrewrite', 'multiviews', 'querystring', 'simple'
 		'url_handler' => 'modrewrite',

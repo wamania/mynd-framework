@@ -12,7 +12,7 @@ class defaultController extends mfController
 
     public function init()
     {
-        if (_r('environment') != 'development') {
+        if (_r('environment') != 'local') {
             die('FORBIDDEN !');
         }
     }

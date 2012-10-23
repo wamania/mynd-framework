@@ -4,21 +4,21 @@ $config = array
 (
     'development' => array
     (
-        'dsn' => 'mysql:host=localhost;dbname=lithium',
+        'dsn' => 'mysql:host=localhost;dbname=myndframework',
 		'user' => 'root',
-		'pass' => 'meuhmeuh'
+		'pass' => 'password'
     ),
     'production' => array
     (
-        'dsn' => 'mysql:host=localhost;dbname=lithium',
-		'user' => 'lithium',
-		'pass' => 'meuhmeuh'
+        'dsn' => 'mysql:host=localhost;dbname=myndframework',
+		'user' => 'root',
+		'pass' => 'password'
     ),
     'test' => array
     (
-        'dsn' => 'mysql:host=localhost;dbname=framework',
+        'dsn' => 'mysql:host=localhost;dbname=myndframework',
 		'user' => 'root',
-		'pass' => 'meuhmeuh'
+		'pass' => 'password'
     )
 );
 
