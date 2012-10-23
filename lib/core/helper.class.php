@@ -31,7 +31,7 @@ class MfHelper
     }*/
 
 
-    public static function paginate($paginator, $params, $options=array()) {
+    /*public static function paginate($paginator, $params, $options=array()) {
 
         if ( ! isset($options['separator'])) {
             $options['separator'] = '&nbsp;';
@@ -76,7 +76,7 @@ class MfHelper
         $links = '<div '.(!empty($options['class']) ? 'class="'.$options['class'].'"' : '').'>'.$links.'</div>';
 
         return $links;
-    }
+    }*/
 
     /**
      * If <var>$text</var> is longer than <var>$length</var>, <var>$text</var> will

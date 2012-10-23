@@ -474,6 +474,7 @@ abstract class MfController {
      * Notre redirecteur
      * @return
      * @param $params Object
+     * @deprecated
      */
     public function redirect_to($params) {
         // Tableau de params, dont controller et action
@@ -494,5 +495,15 @@ abstract class MfController {
         }
 
         $this->response->redirect($url);
+    }
+
+    /**
+     * New version of redirect
+     *
+     * @param unknown_type $params
+     */
+    public function redirectTo($params)
+    {
+        $this->redirect_to($params);
     }
 }
