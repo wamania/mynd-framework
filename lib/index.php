@@ -36,6 +36,7 @@ require_once LI_LIB.'html/index.php';
 require_once LI_LIB.'utils/date.class.php';
 require_once LI_LIB.'utils/minihelpers.php';
 require_once LI_LIB.'utils/utf8_helper.php';
+require_once LI_LIB.'utils/csv.class.php';
 
 require_once LI_LIB.'cache/apc.class.php';
 require_once LI_LIB.'cache/fake.class.php';
