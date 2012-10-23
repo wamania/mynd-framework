@@ -318,7 +318,13 @@ class defaultController extends mfController
             DIRECTORY_SEPARATOR . 'base.php', $base);
 
         // fichier app/modules/default/view/default/index.php
-        $html = 'test';
+        $html = '<div class="container" style="margin-top:20px;">
+    <div class="hero-unit">
+        <h1>Félicitation !</h1>
+        <p>Vous venez de créer ce projet avec Mynd Framework. Si vous voyez cette page, c\'est que tout fonctionne.</p>
+        <p><a href="https://code.google.com/p/mynd-framework/wiki" class="btn btn-primary btn-large">Documentation</a></p>
+    </div>
+</div>';
         file_put_contents($workspace .
             DIRECTORY_SEPARATOR . $this->params['name'] .
             DIRECTORY_SEPARATOR . 'app' .
@@ -334,7 +340,7 @@ class defaultController extends mfController
                 DIRECTORY_SEPARATOR . $this->params['name'] .
                 DIRECTORY_SEPARATOR . '.htaccess', '<IfModule mod_rewrite.c>
     RewriteEngine On
-    #RewriteBase /mynd-framework
+    RewriteBase /'.$this->params['name'].'
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.*)$ index.php?pathinfo=$1 [L,QSA]

@@ -2,49 +2,39 @@
 
 $config = array
 (
-	'local' => array
-	(
-		// 'modrewrite', 'multiviews', 'querystring', 'simple'
-		'url_handler' => 'modrewrite',
+    'local' => array
+    (
+        // 'modrewrite', 'multiviews', 'querystring', 'simple'
+        'url_handler' => 'modrewrite',
 
-		// 'orm', 'simple'
-		'model' => 'simple',
+        // 'orm', 'simple'
+        'model' => 'simple',
 
-		// Routes par défaut
-		'default_module' => 'generator',
-		/*'default_controller' => 'default',
-		'default_action' => 'index',
+        // Routes par défaut
+        'default_module' => 'generator',
+    ),
+    'development' => array
+    (
+        // 'modrewrite', 'multiviews', 'querystring', 'simple'
+        'url_handler' => 'modrewrite',
 
-		'cache' => 'fakecache',
-		'cache_options' => array(
-		)*/
-	),
-	'development' => array
-	(
-		// Possibles are : 'modrewrite', 'multiviews', 'querystring', 'simple'
-		'url_handler' => 'modrewrite',
+        // 'orm', 'simple'
+        'model' => 'simple',
 
-		// 'orm', 'simple'
-		'model' => 'orm'
-	),
-	'production' => array
-	(
-		// Possibles are : 'modrewrite', 'multiviews', 'querystring', 'simple'
-		//'url_handler' => 'modrewrite',
-		'url_handler' => 'simple',
+        // Routes par défaut
+        'default_module' => 'generator',
+    ),
+    'production' => array
+    (
+        // 'modrewrite', 'multiviews', 'querystring', 'simple'
+        'url_handler' => 'modrewrite',
 
-		// 'orm', 'simple'
-		//'model' => 'orm',
-		'model' => 'simple',
+        // 'orm', 'simple'
+        'model' => 'simple',
 
-		/*'cache' => 'memcache',
-		'cache_options' => array(
-			'servers' => array(
-				//array('178.33.249.156', 11211),
-				array('127.0.0.1', 11211)
-			)
-		)*/
-	)
+        // Routes par défaut
+        'default_module' => 'generator',
+    )
 );
 
 return $config[_r('environment')];
