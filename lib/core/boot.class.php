@@ -39,7 +39,7 @@ class MfBoot
             // initialisation du model
             $db_config = _r('db_config');
 
-            if ( ( ! empty($db_config['dsn'])) && ( ! empty($db_config['user'])) && ( ! empty($db_config['pass'])) ) {
+            if ( ( ! empty($db_config['dsn'])) && ( ! empty($db_config['user'])) ) {
                 MfRegistery::set('db', new MfDb($db_config['dsn'], $db_config['user'], $db_config['pass']));
 
                 $model = _c('model');
