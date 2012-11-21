@@ -92,11 +92,11 @@ class MfView
         ));
         $template['action'] = '_'.$template['action'];
 
-        //$template = LI_APP.'modules/'.$template['module'].'/view/'.$template['controller'].'/_'.$template['action'].'.php';
+        /*$partialView = new MfView($this->controller);
 
-        $partialView = new MfView($this->controller);
+        return $partialView->render($template, $data);*/
 
-        return $partialView->render($template, $data);
+        return $this->render($template, $data);
     }
 
     /**

@@ -79,7 +79,18 @@ class MfSimpleSelect implements Iterator, Countable
      */
     public function where ($where, $params=array())
     {
-        $this->where[] = $where;
+        $this->where[] = array($where);
+        if (!is_array($params)) {
+            $params = array($params);
+        }
+        $this->params = array_merge($this->params, $params);
+        return clone($this);
+    }
+
+    public function orWhere ($where, $params=array())
+    {
+        // on ajoute ce orWhere au tableau du dernier where
+        $this->where[ (count($this->where)-1) ][] = $where;
         if (!is_array($params)) {
             $params = array($params);
         }
@@ -117,8 +128,17 @@ class MfSimpleSelect implements Iterator, Countable
     {
         // on commence par le count
         $query = "SELECT COUNT(id) FROM ".$this->table;
+
         if (!empty($this->where)) {
-            $query .= " WHERE " . implode(' AND ', $this->where);
+            $queryWhere = array();
+            foreach ($this->where as $where) {
+                $queryWhere[] = implode(' OR ', $where);
+            }
+
+            $queryWhere = array_map(
+                create_function('$wheres', 'return "(".$wheres.")";'),
+                $queryWhere);
+            $query .= " WHERE " . implode (' AND ', $queryWhere);
         }
         $s = $this->db->prepare($query);
         $s->execute($this->params);
@@ -147,7 +167,15 @@ class MfSimpleSelect implements Iterator, Countable
         $query = "SELECT * FROM " . $this->table;
 
         if (!empty($this->where)) {
-            $query .= " WHERE " . implode(' AND ', $this->where);
+            $queryWhere = array();
+            foreach ($this->where as $where) {
+                $queryWhere[] = implode(' OR ', $where);
+            }
+            $queryWhere = array_map(
+                create_function('$wheres', 'return "(".$wheres.")";'),
+                $queryWhere);
+
+            $query .= " WHERE " . implode (' AND ', $queryWhere);
         }
 
         if (! empty($this->orderBy)) {
@@ -280,7 +308,14 @@ class MfSimpleSelect implements Iterator, Countable
         $query = "SELECT * FROM " . $this->table;
 
         if (!empty($this->where)) {
-            $query .= " WHERE " . implode(' AND ', $this->where);
+            $queryWhere = array();
+            foreach ($this->where as $where) {
+                $queryWhere[] = implode(' OR ', $where);
+            }
+            $queryWhere = array_map(
+                    create_function('$wheres', 'return "(".$wheres.")";'),
+                    $queryWhere);
+            $query .= " WHERE " . implode (' AND ', $queryWhere);
         }
 
         if (! empty($this->orderBy)) {
