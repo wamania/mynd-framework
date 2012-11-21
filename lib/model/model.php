@@ -19,9 +19,6 @@ class MfSimpleModel
         }
 
         $select =  $select->from(static::$table, $class);
-        if (!empty($where)) {
-            $select = $select->where($where, $params);
-        }
         return $select;
     }
 

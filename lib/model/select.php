@@ -34,6 +34,7 @@ class MfSimpleSelect implements Iterator, Countable
      */
     private $params;
 
+
     public function __construct()
     {
         $this->db = _r('db');
@@ -146,13 +147,11 @@ class MfSimpleSelect implements Iterator, Countable
 
         $this->limit($perPage, ($page-1)*$perPage);
 
-        return array(
-            'perPage' => $perPage,
-            'page' => $page,
-            'count' => $count,
-            'page_count' => ceil($count/$perPage),
-            'results' => clone($this)
-        );
+        $paginator = new MfPaginatorSelect($page, $perPage);
+        $paginator->setCount($count);
+        $paginator->setSelect(clone($this));
+
+        return $paginator;
     }
 
     public function execute()
@@ -164,7 +163,7 @@ class MfSimpleSelect implements Iterator, Countable
             }
         }
 
-        $query = "SELECT * FROM " . $this->table;
+        $query = "SELECT *  FROM " . $this->table;
 
         if (!empty($this->where)) {
             $queryWhere = array();
@@ -269,6 +268,7 @@ class MfSimpleSelect implements Iterator, Countable
         }
         return isset($this->results[$this->key]);
     }
+
     /**
      * Renvoie le tableau de résultat complet
      * @return multitype:
