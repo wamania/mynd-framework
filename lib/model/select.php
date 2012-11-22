@@ -201,7 +201,15 @@ class MfSimpleSelect implements Iterator, Countable
         $query = "DELETE FROM ".$this->table;
 
         if (!empty($this->where)) {
-            $query .= " WHERE " . implode(' AND ', $this->where);
+            $queryWhere = array();
+            foreach ($this->where as $where) {
+                $queryWhere[] = implode(' OR ', $where);
+            }
+
+            $queryWhere = array_map(
+                create_function('$wheres', 'return "(".$wheres.")";'),
+                $queryWhere);
+            $query .= " WHERE " . implode (' AND ', $queryWhere);
         }
 
         $s = $this->db->prepare($query);
