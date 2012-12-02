@@ -90,11 +90,12 @@ class MfView
             'module'=>$this->params['module'],
             'controller'=> $this->params['controller']
         ));
+
+        // Nouveau objet, pour ne pas casser la construction de la vue principale
         $template['action'] = '_'.$template['action'];
+        $partialView = new MfView($this->controller);
 
-        /*$partialView = new MfView($this->controller);
-
-        return $partialView->render($template, $data);*/
+        return $partialView->render($template, $data);
 
         return $this->render($template, $data);
     }
