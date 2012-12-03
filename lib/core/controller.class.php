@@ -262,8 +262,8 @@ abstract class MfController {
 
         // Gestion d'un layout
         if (!is_null($layout_name)) {
-            $this->data['layout_content'] = /*$body =*/ $this->view->render($template, $this->data);
-            $layout = array_merge(_selector($layout_name), array('controller' => 'layout'));
+            $this->data['layout_content'] = $this->view->render($template, $this->data);
+            $layout = array('module' => $this->params['module'], 'controller' => 'layout', 'action' => $layout_name);
             $body = $this->view->render($layout, $this->data);
 
         // no layout
