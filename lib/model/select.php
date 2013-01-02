@@ -198,6 +198,11 @@ class MfSimpleSelect implements Iterator, Countable
 
     public function remove()
     {
+        return $this->delete();
+    }
+
+    public function delete()
+    {
         $query = "DELETE FROM ".$this->table;
 
         if (!empty($this->where)) {

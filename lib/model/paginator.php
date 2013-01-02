@@ -41,6 +41,15 @@ abstract class MfPaginatorBase
     }
 
     /**
+     * Setter de la page actuelle
+     * @param int $page
+     */
+    public function setPage($page)
+    {
+        $this->page = $page;
+    }
+
+    /**
      * Page actuelle
      */
     public function page()
