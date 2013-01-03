@@ -125,6 +125,17 @@ class MfSimpleSelect implements Iterator, Countable
         return clone($this);
     }
 
+    /**
+     * Synonyme of orderBy
+     * @param unknown_type $str
+     * @return Ambigous <object, MfSimpleSelect>
+     */
+    public function order($str)
+    {
+        $this->orderBy = func_get_args();
+        return clone($this);
+    }
+
     public function paginate($page, $perPage)
     {
         // on commence par le count
