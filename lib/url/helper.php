@@ -30,6 +30,12 @@ function _selector($query)
         $queryParams['controller'] = $tabParams[1];
         $queryParams['action'] = $tabParams[2];
 
+    } elseif (count($tabParams) == 4) {
+        $queryParams['module'] =  $tabParams[0];
+        $queryParams['controller'] = $tabParams[1];
+        $queryParams['action'] = $tabParams[2];
+        $queryParams['id'] = $tabParams[3];
+
     } else {
         throw new Exception('Mauvais selecteur dans le lien');
     }

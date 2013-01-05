@@ -138,7 +138,7 @@ abstract class MfParamString implements iUrlEngine
         if (count($getParams) > 0) {
             $tabTempurl = array();
             foreach ($getParams as $key=>$value) {
-                if (!empty($value)) {
+                if (isset($value)) {
                     if (is_array($value)) {
                         foreach ($value as $v) {
                             $tabTempurl[] = $key.'[]='.urlencode($v);
