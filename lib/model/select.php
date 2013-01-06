@@ -88,6 +88,12 @@ class MfSimpleSelect implements Iterator, Countable
         return clone($this);
     }
 
+    /**
+     * Ajoute OR WHERE au dernier WHERE
+     * @param String $where
+     * @param mixed $params
+     * @return MfSimpleSelect
+     */
     public function orWhere ($where, $params=array())
     {
         // on ajoute ce orWhere au tableau du dernier where
@@ -136,10 +142,12 @@ class MfSimpleSelect implements Iterator, Countable
         return clone($this);
     }
 
-    public function paginate($page, $perPage)
+    /**
+     * Factorisation de la construction de la clause where, en prenant en compte les orWhere
+     */
+    public function buildWhere()
     {
-        // on commence par le count
-        $query = "SELECT COUNT(id) FROM ".$this->table;
+        $strWhere = '';
 
         if (!empty($this->where)) {
             $queryWhere = array();
@@ -150,19 +158,10 @@ class MfSimpleSelect implements Iterator, Countable
             $queryWhere = array_map(
                 create_function('$wheres', 'return "(".$wheres.")";'),
                 $queryWhere);
-            $query .= " WHERE " . implode (' AND ', $queryWhere);
+            $strWhere = " WHERE " . implode (' AND ', $queryWhere);
         }
-        $s = $this->db->prepare($query);
-        $s->execute($this->params);
-        $count = $s->fetchColumn();
 
-        $this->limit($perPage, ($page-1)*$perPage);
-
-        $paginator = new MfPaginatorSelect($page, $perPage);
-        $paginator->setCount($count);
-        $paginator->setSelect(clone($this));
-
-        return $paginator;
+        return $strWhere;
     }
 
     public function execute()
@@ -175,18 +174,7 @@ class MfSimpleSelect implements Iterator, Countable
         }
 
         $query = "SELECT *  FROM " . $this->table;
-
-        if (!empty($this->where)) {
-            $queryWhere = array();
-            foreach ($this->where as $where) {
-                $queryWhere[] = implode(' OR ', $where);
-            }
-            $queryWhere = array_map(
-                create_function('$wheres', 'return "(".$wheres.")";'),
-                $queryWhere);
-
-            $query .= " WHERE " . implode (' AND ', $queryWhere);
-        }
+        $query .= $this->buildWhere();
 
         if (! empty($this->orderBy)) {
             $query .= " ORDER BY " . implode(',', $this->orderBy);
@@ -207,29 +195,71 @@ class MfSimpleSelect implements Iterator, Countable
         $this->key = 0;
     }
 
+    /**
+     * Renvoi un paginator utilisable par un helper
+     * @param unknown_type $page
+     * @param unknown_type $perPage
+     * @return MfPaginatorSelect
+     */
+    public function paginate($page, $perPage)
+    {
+        // on commence par le count
+        $query = "SELECT COUNT(id) FROM ".$this->table;
+        $query .= $this->buildWhere();
+
+        $s = $this->db->prepare($query);
+        $s->execute($this->params);
+        $count = $s->fetchColumn();
+
+        $this->limit($perPage, ($page-1)*$perPage);
+
+        $paginator = new MfPaginatorSelect($page, $perPage);
+        $paginator->setCount($count);
+        $paginator->setSelect(clone($this));
+
+        return $paginator;
+    }
+
+    /**
+     * Synonyme de delete
+     * @see delete()
+     */
     public function remove()
     {
         return $this->delete();
     }
 
+    /**
+     * Supprime l'ensemble des résultats
+     */
     public function delete()
     {
         $query = "DELETE FROM ".$this->table;
-
-        if (!empty($this->where)) {
-            $queryWhere = array();
-            foreach ($this->where as $where) {
-                $queryWhere[] = implode(' OR ', $where);
-            }
-
-            $queryWhere = array_map(
-                create_function('$wheres', 'return "(".$wheres.")";'),
-                $queryWhere);
-            $query .= " WHERE " . implode (' AND ', $queryWhere);
-        }
+        $query .= $this->buildWhere();
 
         $s = $this->db->prepare($query);
         return $s->execute($this->params);
+    }
+
+    /**
+     * Mets à jours l'ensemble des résultats
+     * @param array $set
+     */
+    public function update($datas = array())
+    {
+        $query = "UPDATE ".$this->table." SET ";
+
+        $set = array();
+        $params = array();
+        foreach ($datas as $k => $v) {
+            $set[] = $k.'=:'.$k;
+            $params[':'.$k] = $v;
+        }
+        $query .= implode(',', $set);
+        $query .= $this->buildWhere();
+
+        $s = $this->db->prepare($query);
+        return $s->execute($params);
     }
 
     /**
