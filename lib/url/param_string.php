@@ -106,7 +106,7 @@ abstract class MfParamString implements iUrlEngine
             // On vérifie qu'on a bien tous nos paramètres !
             foreach ($tabParamsURL as $key => $value) {
 
-                if ($value != $params[$key]) {
+                if ( (!isset($params[$key])) || ($value != $params[$key]) ) {
                     $badparams = true;
                 }
             }

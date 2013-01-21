@@ -145,6 +145,11 @@ class MfPaginator extends MfPaginatorBase implements Iterator
     }
 }
 
+/**
+ * Paginator pour la class Select
+ * @author wamania
+ *
+ */
 class MfPaginatorSelect extends MfPaginator implements Iterator
 {
     private $select;

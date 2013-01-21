@@ -166,6 +166,11 @@ class MfSimpleModel
         return false;
     }
 
+    public function remove()
+    {
+        return $this->delete();
+    }
+
     public function __get($key)
     {
         if (isset($this->data[$key])) {
