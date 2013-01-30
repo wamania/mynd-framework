@@ -1,6 +1,6 @@
 <?php
 
-class MfSimpleSelect implements Iterator, Countable
+class MfSimpleSelect implements Iterator, Countable, ArrayAccess
 {
     private $db;
 
@@ -321,6 +321,43 @@ class MfSimpleSelect implements Iterator, Countable
             $this->execute();
         }
         return isset($this->results[$this->key]);
+    }
+
+    /**
+     * Setter de l'interface ArrayAccess
+     *
+     * @see ArrayAccess::offsetSet()
+     */
+    public function offsetSet($offset, $value)
+    {
+        $this->results[$offset] = $value;
+    }
+
+    /**
+     * isset de l'interface ArrayAccess
+     * @see ArrayAccess::offsetExists()
+     */
+    public function offsetExists($offset)
+    {
+        return isset($this->results[$offset]);
+    }
+
+    /**
+     * unset de l'interface ArrayAccess
+     * @see ArrayAccess::offsetUnset()
+     */
+    public function offsetUnset($offset)
+    {
+        unset($this->results[$offset]);
+    }
+
+    /**
+     * Getter de l'interface ArrayAccess
+     * @see ArrayAccess::offsetGet()
+     */
+    public function offsetGet($offset)
+    {
+        return isset($this->results[$offset]) ? $this->results[$offset] : null;
     }
 
     /**
