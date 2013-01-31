@@ -259,7 +259,7 @@ class MfSimpleSelect implements Iterator, Countable, ArrayAccess
         $query .= $this->buildWhere();
 
         $s = $this->db->prepare($query);
-        return $s->execute($params);
+        return $s->execute(array_merge($params, $this->params));
     }
 
     /**
