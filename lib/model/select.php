@@ -10,6 +10,8 @@ class MfSimpleSelect implements Iterator, Countable, ArrayAccess
 
     private $table;
 
+    private $primary;
+
     private $class;
 
     private $where;
@@ -64,10 +66,12 @@ class MfSimpleSelect implements Iterator, Countable, ArrayAccess
      * @return Object of LiSqlQuery Retourne un clone de lui-même
      * @param object $class
      */
-    public function from($table, $class)
+    public function from($table, $class, $primary)
     {
         $this->table = $table;
         $this->class = $class;
+        $this->primary = $primary;
+
         return clone($this);
     }
 
@@ -203,8 +207,15 @@ class MfSimpleSelect implements Iterator, Countable, ArrayAccess
      */
     public function paginate($page, $perPage)
     {
+        // la clé primaire
+        if (is_array($this->primary)) {
+            $col = '*';
+        } else {
+            $col = $this->primary;
+        }
+
         // on commence par le count
-        $query = "SELECT COUNT(id) FROM ".$this->table;
+        $query = "SELECT COUNT(".$col.") FROM ".$this->table;
         $query .= $this->buildWhere();
 
         $s = $this->db->prepare($query);
@@ -385,6 +396,10 @@ class MfSimpleSelect implements Iterator, Countable, ArrayAccess
         return count($this->results);
     }
 
+    /**
+     * Pour DEBUG
+     * @return string
+     */
     public function __toString()
     {
         $order = array();

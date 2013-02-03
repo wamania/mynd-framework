@@ -1,15 +1,48 @@
 <?php
+
+/**
+ * Classe model, représente une instance d'un modèle
+ * @author wamania
+ *
+ */
 class MfSimpleModel
 {
+    /**
+     * L'object db (decorator de PDO)
+     * @var unknown_type
+     */
     protected $db;
 
+    /**
+     * Nom de la table, optionel si la table est strtolower(__CLASS__)
+     * @var unknown_type
+     */
     public static $table;
 
+    /**
+     * Clé primaire
+     * @var String|Array
+     */
+    public static $primary = 'id';
+
+    /**
+     * un cache très simple pour stocker les colonnes
+     * @var Array
+     */
     private static $cache;
 
+    /**
+     * Les données de l'instance du model
+     * @var unknown_type
+     */
     protected $data = array();
 
-    public static function select()
+    /**
+     * Portail vers le selecteur
+     *
+     * @return Array
+     */
+    public static function select($where=null, $params=null)
     {
         $class = get_called_class();
         $select = new MfSimpleSelect();
@@ -18,10 +51,23 @@ class MfSimpleModel
             static::$table = strtolower($class);
         }
 
-        $select =  $select->from(static::$table, $class);
+        $select =  $select->from(static::$table, $class, static::$primary);
+        if (!is_null($where)) {
+            if (!is_array($params)) {
+                $params = array($params);
+            }
+            $select = $select->where($where, $params);
+        }
         return $select;
     }
 
+    /**
+     * Portail vers le selecteur pour sortir 1 ligne seulement
+     *
+     * @param mixed $where
+     * @param array $params
+     * @return object of MfSimpleModel
+     */
     public static function one($where, $params=null)
     {
         $class = get_called_class();
@@ -31,15 +77,37 @@ class MfSimpleModel
             static::$table = strtolower($class);
         }
 
-        $select =  $select->from(static::$table, $class);
-        if (is_numeric($where)) {
-            $select = $select->where("id=".$where);
-        } else {
+        $select =  $select->from(static::$table, $class, static::$primary);
+
+        // 1er cas, clé composée
+        if (is_array($where)) {
+            if (!is_array(static::$primary)) {
+                throw new MfModelException('Ce model a une primary key simple !', 101);
+                return;
+            }
+            if (count($where) != count(static::$primary)) {
+                throw new MfModelException('Ce model a une clé primaire composé de '.count(static::$primary).' champs. '.count($where).' donnés !', 103);
+                return;
+            }
+            foreach (static::$primary as $k => $primary) {
+                $select = $select->where($primary.'=?', $where[$k]);
+            }
+
+        // clé numérique
+        } elseif (is_numeric($where)) {
+            $select = $select->where(static::$primary."=?", $where);
+
+        } elseif (is_string($where)) {
             if (!is_array($params)) {
                 $params = array($params);
             }
             $select = $select->where($where, $params);
+
+        } else {
+            throw new MfModelException('Le 1er paramètre de la méthode static MfSimpleModel::one() est de type inconnu !', 102);
+            return;
         }
+
         $current = $select->current();
         if (empty($current)) {
             return null;
@@ -47,12 +115,25 @@ class MfSimpleModel
         return $current;
     }
 
-    public function __construct($params = null)
+    /**
+     * Constructor
+     * @param unknown_type $params
+     */
+    public function __construct($id = null)
     {
-        $this->init($params);
+        /*$this->init($params);*/
+        $this->init();
+
+        if (! is_null($id)) {
+            $this->load($id);
+        }
     }
 
-    public function init($params = null)
+    /**
+     * Init, placé ici et pas dans le constructor pour l'utiliser dans __wakeup
+     * @param array $params
+     */
+    public function init(/*$params = null*/)
     {
         $this->db = _r('db');
 
@@ -60,14 +141,14 @@ class MfSimpleModel
             static::$table = strtolower(get_called_class());
         }
 
-        if ( ! is_null($params)) {
+        /*if ( ! is_null($params)) {
             if (is_numeric($params)) {
                 $this->load($params);
 
             } elseif (is_array($params)) {
                 $this->inject($params);
             }
-        }
+        }*/
     }
 
     public function __sleep()
@@ -80,15 +161,39 @@ class MfSimpleModel
         $this->init();
     }
 
+    /**
+     * Charge l'objet courant désigné par sa clé primaire (simple ou composé)
+     *
+     * @param Int|Mixed $id
+     */
     public function load($id)
     {
+
+        /*$where = array();
+
+        if (is_array($id)) {
+            if (!is_array(static::$primary)) {
+                throw new MfModelException('Ce model a une primary key simple !', 101);
+                return;
+            }
+            if (count($id) != count(static::$primary)) {
+                throw new MfModelException('Ce model a une clé primaire composé de '.count(static::$primary).' champs. '.count($id).' donnés !', 103);
+                return;
+            }
+            foreach (static::$primary as $k => $primary) {
+                $select = $select->where($primary.'=?', $where[$k]);
+            }
+        } else {
+
+        }
+
         $s = $this->db->prepare("SELECT * FROM ".static::$table." WHERE id = ?");
         $s->execute(array($id));
         $row = $s->fetch();
 
         if (is_array($row)) {
             $this->inject($row);
-        }
+        }*/
     }
 
     public function inject(array $array)
