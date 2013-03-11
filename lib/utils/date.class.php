@@ -22,6 +22,12 @@ class MfDate
         return new MfDate($datetime);
     }
 
+    public static function fromFrenchDate($date)
+    {
+        $datetime = DateTime::createFromFormat('d/m/Y', $date);
+        return new MfDate($datetime);
+    }
+
     public static function fromFormat($format, $date)
     {
         $datetime = DateTime::createFromFormat($format, $date);
