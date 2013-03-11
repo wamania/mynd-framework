@@ -197,7 +197,7 @@ abstract class MfController {
         $this->jsSuccess[] = array('msg' => $msg, 'datas' => $datas);
     }
 
-    public function Getparam($index, $default = null)
+    public function getParam($index, $default = null)
     {
         if (!empty($this->params[$index])) {
             return $this->params[$index];
