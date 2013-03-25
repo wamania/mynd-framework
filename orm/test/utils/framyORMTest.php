@@ -10,12 +10,12 @@ $config_db = array (
 
 LiInitModel::init(null, $config_db);
 
-class framyORMTest extends UnitTestCase {
-    
+class MfTest extends UnitTestCase {
+
     public function __construct() {
 
         if (!empty($this->sql)) {
-            
+
             $db = LiDb::getSingleton();
             $content = file_get_contents(LI_MODEL.'test/sql/'.$this->sql, 'r');
             $tabSql = explode(';', $content);
