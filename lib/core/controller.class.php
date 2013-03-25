@@ -307,9 +307,9 @@ abstract class MfController {
     $this->finalize_render($data);
     }*/
 
-    public function render_file($file, $filename, $force = true)
+    public function render_file($file, $filename, $force = true, $mimetype = null)
     {
-        $tab = array();
+        /*$tab = array();
         if (preg_match('#.*\.([a-zA-Z]{2,4})$#', $filename, $tab)) {
             $extension = $tab[1];
             switch($extension) {
@@ -334,9 +334,9 @@ abstract class MfController {
                     $force = false;
                     break;
             }
-        }
+        }*/
 
-        if (empty($mimetype)) {
+        if (is_null($mimetype)) {
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
             $mimetype = finfo_file($finfo, $file);
         }
@@ -347,8 +347,8 @@ abstract class MfController {
             $this->response->headers(array ('Content-disposition: inline; filename='.$filename));
         }
         $this->response->headers(array (
-                'Content-Type: '.$mimetype,
-                'Pragma: no-cache'
+            'Content-Type: '.$mimetype,
+            'Pragma: no-cache'
         ));
 
         $datas = file_get_contents($file);
