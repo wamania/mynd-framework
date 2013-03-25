@@ -50,13 +50,17 @@ class MfSimpleModel
         if (empty(static::$table)) {
             static::$table = strtolower($class);
         }
+        $select->from(static::$table, $class, static::$primary);
 
-        $select =  $select->from(static::$table, $class, static::$primary);
+        if (empty(static::$table)) {
+            static::$table = strtolower($class);
+        }
+
         if (!is_null($where)) {
             if (!is_array($params)) {
                 $params = array($params);
             }
-            $select = $select->where($where, $params);
+            $select->where($where, $params);
         }
         return $select;
     }
@@ -64,7 +68,7 @@ class MfSimpleModel
     /**
      * Portail vers le selecteur pour sortir 1 ligne seulement
      *
-     * @param mixed $where
+     * @param mixed $where (primary key, array of primary keys or string)
      * @param array $params
      * @return object of MfSimpleModel
      */
@@ -76,8 +80,7 @@ class MfSimpleModel
         if (empty(static::$table)) {
             static::$table = strtolower($class);
         }
-
-        $select =  $select->from(static::$table, $class, static::$primary);
+        $select->from(static::$table, $class, static::$primary);
 
         // 1er cas, clé composée
         if (is_array($where)) {
@@ -90,24 +93,24 @@ class MfSimpleModel
                 return;
             }
             foreach (static::$primary as $k => $primary) {
-                $select = $select->where($primary.'=?', $where[$k]);
+                $select->where($primary.'=?', $where[$k]);
             }
 
-        // clé numérique
+            // clé numérique
         } elseif (is_numeric($where)) {
-            $select = $select->where(static::$primary."=?", $where);
+            $select->where(static::$primary."=?", $where);
 
         } elseif (is_string($where)) {
+
             if (!is_array($params)) {
                 $params = array($params);
             }
-            $select = $select->where($where, $params);
+            $select->where($where, $params);
 
         } else {
             throw new MfModelException('Le 1er paramètre de la méthode static MfSimpleModel::one() est de type inconnu !', 102);
             return;
         }
-
         $current = $select->current();
         if (empty($current)) {
             return null;
@@ -116,16 +119,31 @@ class MfSimpleModel
     }
 
     /**
+     * Une methode fetch qui retourne un tableau d'objets de la classe courante
+     * @param PDOStatement $s
+     */
+    public static function fetch(PDOStatement $s)
+    {
+        $class = get_called_class();
+
+        $lines = array();
+        while ($line = $s->fetchObject($class)) {
+            $lines[] = $line;
+        }
+
+        return $lines;
+    }
+
+    /**
      * Constructor
      * @param unknown_type $params
      */
-    public function __construct($id = null)
+    public function __construct(array $data = array())
     {
-        /*$this->init($params);*/
         $this->init();
 
-        if (! is_null($id)) {
-            $this->load($id);
+        if (! empty($data)) {
+            $this->inject($data);
         }
     }
 
@@ -133,22 +151,13 @@ class MfSimpleModel
      * Init, placé ici et pas dans le constructor pour l'utiliser dans __wakeup
      * @param array $params
      */
-    public function init(/*$params = null*/)
+    public function init()
     {
         $this->db = _r('db');
 
         if (empty(static::$table)) {
             static::$table = strtolower(get_called_class());
         }
-
-        /*if ( ! is_null($params)) {
-            if (is_numeric($params)) {
-                $this->load($params);
-
-            } elseif (is_array($params)) {
-                $this->inject($params);
-            }
-        }*/
     }
 
     public function __sleep()
@@ -161,45 +170,10 @@ class MfSimpleModel
         $this->init();
     }
 
-    /**
-     * Charge l'objet courant désigné par sa clé primaire (simple ou composé)
-     *
-     * @param Int|Mixed $id
-     */
-    public function load($id)
+    public function inject(array $data)
     {
-
-        /*$where = array();
-
-        if (is_array($id)) {
-            if (!is_array(static::$primary)) {
-                throw new MfModelException('Ce model a une primary key simple !', 101);
-                return;
-            }
-            if (count($id) != count(static::$primary)) {
-                throw new MfModelException('Ce model a une clé primaire composé de '.count(static::$primary).' champs. '.count($id).' donnés !', 103);
-                return;
-            }
-            foreach (static::$primary as $k => $primary) {
-                $select = $select->where($primary.'=?', $where[$k]);
-            }
-        } else {
-
-        }
-
-        $s = $this->db->prepare("SELECT * FROM ".static::$table." WHERE id = ?");
-        $s->execute(array($id));
-        $row = $s->fetch();
-
-        if (is_array($row)) {
-            $this->inject($row);
-        }*/
-    }
-
-    public function inject(array $array)
-    {
-        if (is_array($array)) {
-            foreach ($array as $key => $value) {
+        if (is_array($data)) {
+            foreach ($data as $key => $value) {
                 $this->data[$key] = $value;
             }
         }
@@ -210,10 +184,28 @@ class MfSimpleModel
         if (!empty($array)) {
             $this->inject($array);
         }
-        $columns = $this->queryColumns();
 
         // insert
         if (empty($this->id)) {
+            return $this->insert();
+
+        // update
+        } else {
+            return $this->update();
+        }
+
+        return false;
+    }
+
+    private function insert(array $array = array())
+    {
+        /*if (!empty($array)) {
+            $this->inject($array);
+        }*/
+        $columns = $this->queryColumns();
+
+        // insert
+        //if (empty($this->id)) {
             $cols = array();
             $vals = array();
             $params = array();
@@ -238,9 +230,18 @@ class MfSimpleModel
             $this->id = $this->db->lastInsertId();
 
             return $check;
+        //}
+    }
 
-            // update
-        } else {
+    private function update(array $array = array())
+    {
+        /*if (!empty($array)) {
+            $this->inject($array);
+        }*/
+        $columns = $this->queryColumns();
+
+        // insert
+        //if ( ! empty($this->id)) {
             $set = array();
             $params = array();
 
@@ -257,7 +258,9 @@ class MfSimpleModel
             $sql = "UPDATE " . static::$table . ' SET ' . implode(', ', $set) . " WHERE id = :id";
             $s = $this->db->prepare($sql);
             return $s->execute($params);
-        }
+        //}
+
+        //return false;
     }
 
     public function delete()
