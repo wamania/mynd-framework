@@ -75,6 +75,11 @@ class MfPaginator extends MfPaginatorBase implements Iterator
         $this->datas = $datas;
     }
 
+    public function reset()
+    {
+        $this->key = 0;
+    }
+
     /**
      * Implémentation de la méthode current de l'interface Iterator
      * Si l'attribut $this->results est vide, on exécute la requête

@@ -82,22 +82,8 @@ class MfSimpleModel
         }
         $select->from(static::$table, $class, static::$primary);
 
-        // 1er cas, clé composée
-        if (is_array($where)) {
-            if (!is_array(static::$primary)) {
-                throw new MfModelException('Ce model a une primary key simple !', 101);
-                return;
-            }
-            if (count($where) != count(static::$primary)) {
-                throw new MfModelException('Ce model a une clé primaire composé de '.count(static::$primary).' champs. '.count($where).' donnés !', 103);
-                return;
-            }
-            foreach (static::$primary as $k => $primary) {
-                $select->where($primary.'=?', $where[$k]);
-            }
-
-            // clé numérique
-        } elseif (is_numeric($where)) {
+        // clé primaire
+        if (is_numeric($where)) {
             $select->where(static::$primary."=?", $where);
 
         } elseif (is_string($where)) {
@@ -186,7 +172,7 @@ class MfSimpleModel
         }
 
         // insert
-        if (empty($this->id)) {
+        if (empty($this->{static::$primary})) {
             return $this->insert();
 
         // update
@@ -227,7 +213,7 @@ class MfSimpleModel
             $s = $this->db->prepare($sql);
             $check = $s->execute($params);
 
-            $this->id = $this->db->lastInsertId();
+            $this->{static::$primary} = $this->db->lastInsertId();
 
             return $check;
         //}
@@ -255,7 +241,8 @@ class MfSimpleModel
                 $set[] = 'updated_on=:updated_on';
                 $params[':updated_on'] = date('Y-m-d H:i:s');
             }
-            $sql = "UPDATE " . static::$table . ' SET ' . implode(', ', $set) . " WHERE id = :id";
+            $sql = "UPDATE " . static::$table . ' SET ' . implode(', ', $set) . " WHERE ".static::$primary." = :".static::$primary;
+
             $s = $this->db->prepare($sql);
             return $s->execute($params);
         //}
@@ -265,10 +252,10 @@ class MfSimpleModel
 
     public function delete()
     {
-        if (!empty($this->id)) {
-            $sql = "DELETE FROM " . static::$table . " WHERE id = ?";
+        if (!empty($this->{static::$primary})) {
+            $sql = "DELETE FROM " . static::$table . " WHERE ".static::$primary." = ?";
             $s = $this->db->prepare($sql);
-            return $s->execute(array($this->id));
+            return $s->execute(array($this->{static::$primary}));
         }
 
         return false;

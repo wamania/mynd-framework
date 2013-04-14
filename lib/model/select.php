@@ -208,14 +208,14 @@ class MfSimpleSelect implements Iterator, Countable, ArrayAccess
     public function paginate($page, $perPage)
     {
         // la clé primaire
-        if (is_array($this->primary)) {
+        /*if (is_array($this->primary)) {
             $col = '*';
         } else {
             $col = $this->primary;
-        }
+        }*/
 
         // on commence par le count
-        $query = "SELECT COUNT(".$col.") FROM ".$this->table;
+        $query = "SELECT COUNT(".$this->primary.") FROM ".$this->table;
         $query .= $this->buildWhere();
 
         $s = $this->db->prepare($query);
