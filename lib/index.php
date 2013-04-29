@@ -10,7 +10,6 @@ set_include_path(
  */
 require_once LI_LIB.'core/controller.class.php';
 require_once LI_LIB.'core/boot.class.php';
-require_once LI_LIB.'core/helper.class.php';
 require_once LI_LIB.'core/session.class.php';
 require_once LI_LIB.'core/view.class.php';
 require_once LI_LIB.'core/registery.class.php';
@@ -37,6 +36,8 @@ require_once LI_LIB.'utils/date.class.php';
 require_once LI_LIB.'utils/minihelpers.php';
 require_once LI_LIB.'utils/utf8_helper.php';
 require_once LI_LIB.'utils/csv.class.php';
+require_once LI_LIB.'utils/image.php';
+require_once LI_LIB.'utils/string.php';
 
 require_once LI_LIB.'cache/apc.class.php';
 require_once LI_LIB.'cache/fake.class.php';
