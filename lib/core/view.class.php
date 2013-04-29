@@ -63,7 +63,8 @@ class MfView
      * @param $data Array
      * @param $params Array
      */
-    public function render( $template, $data = array() ) {
+    public function render( $template, $data = array() )
+    {
 
         if ( ! is_array($template)) {
             $template = _selector($template, array(
@@ -84,7 +85,14 @@ class MfView
         return $content;
     }
 
-    public function render_partial( $template, $data = array() ) {
+    /**
+     * Affichage de vues partielles dans la vue
+     * @param unknown_type $template
+     * @param unknown_type $data
+     * @return Ambigous <void, string>
+     */
+    public function render_partial( $template, $data = array() )
+    {
 
         $template = _selector($template, array(
             'module'=>$this->params['module'],
@@ -98,6 +106,16 @@ class MfView
         return $partialView->render($template, $data);
 
         return $this->render($template, $data);
+    }
+
+    /**
+     * synonime plus court
+     * @param unknown_type $template
+     * @param unknown_type $data
+     */
+    public function partial($template, $data = array())
+    {
+        return $this->render_partial($template, $data);
     }
 
     /**
