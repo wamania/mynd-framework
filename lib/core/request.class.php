@@ -2,12 +2,10 @@
 
 class MfRequest
 {
-    private $pathinfo;
-
     private $params;
 
     public function __construct() {
-        $this->pathinfo = '';
+        //$this->pathinfo = '';
     }
 
     private function stripslashes() {
@@ -31,16 +29,16 @@ class MfRequest
         $this->stripslashes();
 
         if (_c('url_handler') == 'modrewrite') {
-            $this->pathinfo = (isset($_GET['pathinfo']) ? $_GET['pathinfo'] : '');
+            $pathinfo = (isset($_GET['pathinfo']) ? $_GET['pathinfo'] : '');
 
         } elseif (_c('url_handler') == 'multiviews') {
             if (isset($_SERVER['PATH_INFO'])) {
-                $this->pathinfo =  substr($_SERVER['PATH_INFO'], 1, strlen($_SERVER['PATH_INFO'])-1);
+                $pathinfo =  substr($_SERVER['PATH_INFO'], 1, strlen($_SERVER['PATH_INFO'])-1);
             }
 
         } elseif (_c('url_handler') == 'querystring') {
             if (isset($_GET['qs'])) {
-                $this->pathinfo =  substr($_GET['qs'], 1, strlen($_GET['qs'])-1);
+                $pathinfo =  substr($_GET['qs'], 1, strlen($_GET['qs'])-1);
             }
 
         } elseif (_c('url_handler') == 'simple') {
@@ -52,7 +50,7 @@ class MfRequest
         $urlEngineClassName = 'Mf'.ucwords(_c('url_handler')).'Url';
         try {
             $urlEngine = new $urlEngineClassName;
-            $this->params = $urlEngine->url2params($this->pathinfo, $_GET);
+            $this->params = $urlEngine->url2params($pathinfo, $_GET);
             if (isset($this->params['pathinfo'])) {
                 unset($this->params['pathinfo']);
             }
