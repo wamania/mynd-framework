@@ -8,26 +8,31 @@ class MfImage
 
     private $size;
 
-    public function __construct($file, $extension)
+    public function __construct($filename, $extension = null)
     {
         $this->image = null;
-        $this->extension = $extension;
+
+        if (is_null($extension)) {
+            $this->extension = self::getExtension($filename);
+        } else {
+            $this->extension = $extension;
+        }
 
         // redimensionnement
         switch($this->extension) {
             case 'jpg':
             case 'jpeg':
-                $this->image = imagecreatefromjpeg($file);
+                $this->image = imagecreatefromjpeg($filename);
                 break;
             case 'png':
-                $this->image = imagecreatefrompng($file);
+                $this->image = imagecreatefrompng($filename);
                 break;
             case 'gif':
-                $this->image = imagecreatefromgif($file);
+                $this->image = imagecreatefromgif($filename);
         }
 
         // taille de l'image original
-        $this->size = getimagesize($file);
+        $this->size = getimagesize($filename);
     }
 
     /**
@@ -142,6 +147,45 @@ class MfImage
         return false;
     }
 
+    public function getHeightedImage($height, $newFile)
+    {
+        if (is_null($this->image)) {
+            return false;
+        }
+
+        // si plus petite, alors on zappe
+        if ($this->size[1] < $height) {
+            $height = $this->size[1];
+        }
+        $ratio = $this->size[0] / $this->size[1];
+        $newWidth = $height * $ratio;
+
+        // on crée la nouvelle image
+        $newImage = imagecreatetruecolor($newWidth, $height);
+
+        // on crée un noir qui servira pour la transparence
+        $colorImage = imagecolorallocate($newImage,0x00,0x00,0x00);
+
+        // fond transparent
+        imagefill($newImage, 0, 0, $colorImage);
+
+        imagecopyresampled($newImage , $this->image, 0, 0, 0, 0, $newWidth, $height, $this->size[0],$this->size[1]);
+
+        switch($this->extension) {
+            case 'jpg':
+            case 'jpeg':
+                return imagejpeg($newImage, $newFile);
+                break;
+            case 'png':
+                return imagepng($newImage, $newFile);
+                break;
+            case 'gif':
+                return imagegif($newImage, $newFile);
+        }
+
+        return false;
+    }
+
     public function avatarize($width, $height, $params, $newFile)
     {
         // on crée la nouvelle image
@@ -161,5 +205,10 @@ class MfImage
             base_convert(substr($rgb, 2, 2), 16, 10),
             base_convert(substr($rgb, 4, 2), 16, 10),
         );
+    }
+
+    public static function getExtension($filename)
+    {
+        return substr(strrchr($filename, '.'), 1);
     }
 }
