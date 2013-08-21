@@ -4,6 +4,8 @@
  */
 namespace Mynd\Core\View;
 
+use Mynd\Core\Url\Url;
+
 class View
 {
     /**
@@ -59,7 +61,11 @@ class View
             ));
         }
 
-        $template = LI_APP.'/Modules/'.$template['module'].'/View/'.$template['controller'].'/'.$template['action'].'.php';
+        $moduleName = Url::toClass($template['module']);
+        $controllerName = Url::toClass($template['controller']);
+        $actionName = Url::toClass($template['action']);
+
+        $template = LI_APP.'/Modules/'.$moduleName.'/View/'.$controllerName.'/'.$actionName.'.php';
 
         $this->data = $data;
 
@@ -79,14 +85,13 @@ class View
      */
     public function render_partial( $template, $data = array() )
     {
-
         $template = _selector($template, array(
             'module'=>$this->params['module'],
             'controller'=> $this->params['controller']
         ));
 
         // Nouveau objet, pour ne pas casser la construction de la vue principale
-        $template['action'] = '_'.$template['action'];
+        //$template['action'] = '_'.$template['action'];
         $partialView = new View($this->controller);
 
         return $partialView->render($template, $data);

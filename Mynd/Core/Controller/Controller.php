@@ -6,6 +6,8 @@
  */
 namespace Mynd\Core\Controller;
 
+use Mynd\Core\Url\Url;
+
 //use Mynd\Core\Utils\PhpSession;
 use Mynd\Core\View\View;
 
@@ -256,18 +258,19 @@ abstract class Controller {
 
         // On cherche si ce template est contenu dans un layout
         $layout_name = null;
-        if (array_key_exists($this->params['action'], $this->actions_with_layout)) {
-            if (!is_null($this->actions_with_layout[$this->params['action']])) {
-                $layout_name = $this->actions_with_layout[$this->params['action']];
+        $actionName = Url::toClass($this->params['action']);
+        if (array_key_exists($actionName, $this->actions_with_layout)) {
+            if (!is_null($this->actions_with_layout[$actionName])) {
+                $layout_name = $this->actions_with_layout[$actionName];
             }
-        } elseif (array_key_exists('default', $this->actions_with_layout)) {
-            $layout_name = $this->actions_with_layout['default'];
+        } elseif (array_key_exists('Default', $this->actions_with_layout)) {
+            $layout_name = $this->actions_with_layout['Default'];
         }
 
         // Gestion d'un layout
         if (!is_null($layout_name)) {
             $this->data['layout_content'] = $this->view->render($template, $this->data);
-            $layout = array('module' => $this->params['module'], 'controller' => 'layout', 'action' => $layout_name);
+            $layout = array('module' => $this->params['module'], 'controller' => 'Layout', 'action' => $layout_name);
             $body = $this->view->render($layout, $this->data);
 
         // no layout
@@ -346,9 +349,9 @@ abstract class Controller {
         }
 
         if ($force) {
-            $this->response->headers(array ('Content-disposition: attachment; filename='.$filename));
+            $this->response->headers(array ('Content-disposition: attachment; filename="'.$filename.'"'));
         } else {
-            $this->response->headers(array ('Content-disposition: inline; filename='.$filename));
+            $this->response->headers(array ('Content-disposition: inline; filename="'.$filename.'"'));
         }
         $this->response->headers(array (
             'Content-Type: '.$mimetype,
@@ -473,14 +476,14 @@ abstract class Controller {
         $request->setParams($this->nextParams);
         return $request;
     }*/
-    
+
     /**
      * TODO
      * @param unknown_type $selector
      */
     public function forward($selector)
     {
-        
+
     }
 
     /**
@@ -504,7 +507,7 @@ abstract class Controller {
             }
             // Url
         } else if (is_string($params)) {
-            $url = _url($params);
+            $url = Url::_($params);
         }
 
         $this->response->redirect($url);

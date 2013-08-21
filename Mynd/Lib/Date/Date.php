@@ -1,43 +1,45 @@
 <?php
 
-class MfDate
+namespace Mynd\Lib\Date;
+
+class Date
 {
     private $datetime;
 
     public static function now()
     {
-        $datetime = new Datetime();
-        return new MfDate($datetime);
+        $datetime = new \Datetime();
+        return new Date($datetime);
     }
 
     public static function fromDatetime($datetime)
     {
-        $datetime = DateTime::createFromFormat('Y-m-d H:i:s',  $datetime);
-        return new MfDate($datetime);
+        $datetime = \DateTime::createFromFormat('Y-m-d H:i:s',  $datetime);
+        return new Date($datetime);
     }
 
     public static function fromDate($date)
     {
-        $datetime = DateTime::createFromFormat('Y-m-d', $date);
-        return new MfDate($datetime);
+        $datetime = \DateTime::createFromFormat('Y-m-d', $date);
+        return new Date($datetime);
     }
 
     public static function fromFrenchDate($date)
     {
-        $datetime = DateTime::createFromFormat('d/m/Y', $date);
-        return new MfDate($datetime);
+        $datetime = \DateTime::createFromFormat('d/m/Y', $date);
+        return new Date($datetime);
     }
 
     public static function fromFormat($format, $date)
     {
-        $datetime = DateTime::createFromFormat($format, $date);
-        return new MfDate($datetime);
+        $datetime = \DateTime::createFromFormat($format, $date);
+        return new Date($datetime);
     }
 
     public static function fromTimestamp($timestamp)
     {
-        $datetime = new Datetime('@'.$timestamp);
-        return new MfDate($datetime);
+        $datetime = new \Datetime('@'.$timestamp);
+        return new Date($datetime);
         //$datetime->setTimezone(new DateTimeZone(date_default_timezone_get()));
     }
 

@@ -1,6 +1,8 @@
 <?php
 
-class MfImage
+namespace Mynd\Lib\Image;
+
+class Image
 {
     private $image;
 
@@ -199,7 +201,8 @@ class MfImage
         return imagepng($newImage, $newFile);
     }
 
-    private function rgb2array($rgb) {
+    private function rgb2array($rgb) 
+    {
         return array(
             base_convert(substr($rgb, 0, 2), 16, 10),
             base_convert(substr($rgb, 2, 2), 16, 10),

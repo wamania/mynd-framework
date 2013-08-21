@@ -1,11 +1,13 @@
 <?php
 
+namespace Mynd\Core\Model;
+
 /**
  * Classe model, représente une instance d'un modèle
  * @author wamania
  *
  */
-class SimpleModel
+class Model
 {
     /**
      * L'object db (decorator de PDO)
@@ -45,7 +47,7 @@ class SimpleModel
     public static function select($where=null, $params=null)
     {
         $class = get_called_class();
-        $select = new MfSimpleSelect();
+        $select = new \Mynd\Core\Model\Select();
 
         if (empty(static::$table)) {
             static::$table = strtolower($class);
@@ -75,7 +77,7 @@ class SimpleModel
     public static function one($where, $params=null)
     {
         $class = get_called_class();
-        $select = new MfSimpleSelect();
+        $select = new \Mynd\Core\Model\Select();
 
         if (empty(static::$table)) {
             static::$table = strtolower($class);
@@ -108,7 +110,7 @@ class SimpleModel
      * Une methode fetch qui retourne un tableau d'objets de la classe courante
      * @param PDOStatement $s
      */
-    public static function fetch(PDOStatement $s)
+    public static function fetch(\PDOStatement $s)
     {
         $class = get_called_class();
 

@@ -2,7 +2,7 @@
 
 namespace Mynd\Core\Url;
 
-class RewriteUrl extends ParamString implements iUrlEngine
+class ModrewriteUrl extends ParamString implements iUrlEngine
 {
     public function path2url($path, $domain = null)
     {

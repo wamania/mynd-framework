@@ -1,6 +1,8 @@
 <?php
 
-class MfString
+namespace Mynd\Lib\String;
+
+class String
 {
     public static function slugify($text)
     {

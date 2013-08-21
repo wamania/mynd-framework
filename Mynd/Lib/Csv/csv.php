@@ -1,4 +1,7 @@
 <?php
+
+namespace Mynd\Lib\Csv;
+
 class utf8encode_filter extends php_user_filter
 {
     function filter($in, $out, &$consumed, $closing)

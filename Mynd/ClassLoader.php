@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Mynd;
 
 /**
@@ -142,21 +133,21 @@ class ClassLoader
 
             return true;
         }*/
-        
+
         // by namespace
         /*if (false !== $pos = strrpos($class, '\\')) {
             // namespaced class name
             $classPath = str_replace('\\', DIRECTORY_SEPARATOR, substr($class, 0, $pos)).DIRECTORY_SEPARATOR;
             $className = substr($class, $pos + 1);
         }*/
-        
+
         $class .= '.php';
-        
+
         foreach ($this->prefixes as $prefix => $dirs) {
             if (0 === strpos($class, $prefix)) {
                 $classPath = substr($class, strlen($prefix)+1);
                 $classPath = str_replace('\\', DIRECTORY_SEPARATOR, $classPath);
-                
+
                 foreach ($dirs as $dir) {
                     $file = $dir.DIRECTORY_SEPARATOR.$classPath;
                     //echo $file."\n";

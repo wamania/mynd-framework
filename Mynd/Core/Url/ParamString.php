@@ -2,11 +2,13 @@
 
 namespace Mynd\Core\Url;
 
+use Mynd\Core\Registery\Registery;
+
 abstract class ParamString implements iUrlEngine
 {
-    public function url2params($url, $get) 
+    public function url2params($url, $get)
     {
-        $routes = _r('routes');
+        $routes = Registery::get('routes');
         if (!is_array($routes)) {
             throw new Exception( "La liste des routes est vide.");
         }
@@ -26,9 +28,9 @@ abstract class ParamString implements iUrlEngine
             // ensuite, test si la regexp de l'url est bonne
             preg_match_all("/:([a-zA-Z0-9_]*)/", $routeUrl, $neededParams);
             $url_regexp = $routeUrl;
-            foreach ($neededParams['1'] as $p) {
+            foreach ($neededParams[1] as $p) {
                 // On cherche si une regexp est definit dans la route
-                $regexp = (isset($route['params'][$p]) ? $route['params'][$p] : '[a-zA-Z0-9_]*');
+                $regexp = (isset($route['params'][$p]) ? $route['params'][$p] : '[a-zA-Z0-9_\-]*');
                 $regexp = '(?P<'.$p.'>'.$regexp.')';
                 $url_regexp = preg_replace("/(:".$p.")/", $regexp, $url_regexp);
 
@@ -44,15 +46,15 @@ abstract class ParamString implements iUrlEngine
                     $route['params'] = array();
                 }
                 unset($get['ps']);
-                
+
                 return array_merge($route['params'], $matches, $this->array_urldecode($get));
             }
         }
-        
+
         return $this->array_urldecode($get);
     }
 
-    public function params2path($params) 
+    public function params2path($params)
     {
         if (empty($params['controller'])) {
             $params['controller'] = _c('default_controller');
@@ -64,7 +66,7 @@ abstract class ParamString implements iUrlEngine
             $params['module'] = _c('default_module');
         }
 
-        $routes = _r('routes');
+        $routes = Registery::get('routes');
         $url = null;
 
         foreach ($routes as $route) {
@@ -162,7 +164,7 @@ abstract class ParamString implements iUrlEngine
         return $url;
     }
 
-    protected function array_urldecode($tab) 
+    protected function array_urldecode($tab)
     {
         $new_tab = array();
 

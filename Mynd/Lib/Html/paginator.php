@@ -12,12 +12,7 @@
  * @params $options Array[optional]
  */
 
-/*function _paginate($paginator, $params, $options=array())
-{
-    return MfHelper::paginate($paginator, $params, $options=array());
-}*/
-
-function paginator($paginator, $params, $options=array())
+function _paginator($paginator, $params, $options=array())
 {
     $length = 11;
     $pager = '<ul>';

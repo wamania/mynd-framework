@@ -1,6 +1,8 @@
 <?php
 
-class SimpleSelect implements Iterator, Countable, ArrayAccess
+namespace Mynd\Core\Model;
+
+class Select implements \Iterator, \Countable, \ArrayAccess
 {
     private $db;
 
@@ -90,6 +92,21 @@ class SimpleSelect implements Iterator, Countable, ArrayAccess
         }
         $this->params = array_merge($this->params, $params);
         return clone($this);
+    }
+
+    /**
+     * @example ->whereIn('id IN ?', array(1,2,9,78,51))
+     * @todo A tester
+     *
+     * @param String $where
+     * @param Array $params
+     */
+    public function whereIn($where, $params=array())
+    {
+        $marks = implode(',', array_fill(0, count($params), '?'));
+        $where = str_replace('?', '('.$marks.')');
+
+        return $this->where($where, $params);
     }
 
     /**

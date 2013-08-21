@@ -2,6 +2,8 @@
 
 namespace Mynd\Core;
 
+use Mynd\Core\Url\Url;
+
 use Mynd\Core\Registery\Registery;
 use Mynd\Core\Request\Request;
 use Mynd\Core\Response\Response;
@@ -16,7 +18,7 @@ class Boot
      * Le dispatcher qui va lancer l'action en fonction des paramètres
      * @return void
      */
-    public static function init() 
+    public static function init()
     {
         // On stock la variable d'environnement qui vient d'apache, pour cela, placer
         // SetEnv Environment (development|production|test)
@@ -29,10 +31,11 @@ class Boot
         // configuration du site
         $config = require LI_APP.'/Config/Config.php';
         Registery::set('config', $config[$environment]);
+        $config = Registery::get('config');
 
         // configuration par default
         Registery::setAndMerge('config', array(
-            'default_module' => 'Front',
+            'default_module' => 'Index',
             'default_controller' => 'Index',
             'default_action' => 'Index'
         ), true);
@@ -69,11 +72,10 @@ class Boot
         $request = new Request();
         $params = &$request->getParams();
         Registery::set('params', $params);
-        $config = Registery::get('config');
 
         // On insère l'éventuel helper lié à notre application
-        if (file_exists(LI_APP.'helper/helper.php')) {
-            require_once LI_APP.'helper/helper.php';
+        if (file_exists(LI_APP.'/Helper/Helper.php')) {
+            require_once LI_APP.'/Helper/Helper.php';
         }
 
         // si le projet contient un fichier boot dans la config
@@ -116,9 +118,32 @@ class Boot
             return $response;
         }*/
 
+        // détermination du nom du module
+        /*$tabModule = explode('-', $params['module']);
+        $moduleName = '';
+        foreach ($tabModule as $partModule) {
+            $moduleName .= ucfirst($partModule);
+        }
+
+        // détermination du nom du controlleur
+        $tabController = explode('-', $params['controller']);
+        $controllerName = '';
+        foreach ($tabController as $partController) {
+            $controllerName .= ucfirst($partController);
+        }
+
+        // détermination du nom de l'action
+        $tabAction = explode('-', $params['action']);
+        $actionName = '';
+        foreach ($tabAction as $partAction) {
+            $actionName .= ucfirst($partAction);
+        }*/
+        $moduleName = Url::toClass($params['module']);
+        $controllerName = Url::toClass($params['controller']);
+        $actionName = Url::toClass($params['action']);
+
         // Et on lance
-        $controller = '\App\Modules\\'.$params['module'].'\Controller\\'.$params['controller'].'Controller';
-        /*$controller = LI_APP.'Modules/'.$params['module'].'/Controller/'.$params['controller'].'Controller.php';*/
+        $controller = '\App\Modules\\'.$moduleName.'\Controller\\'.$controllerName.'Controller';
         if ( ! class_exists($controller)) {
             $response->body = 'Controleur '.$controller.' introuvable';
             $response->send404();
@@ -126,13 +151,13 @@ class Boot
 
         $oController = new $controller($request, $response);
 
-        if (! method_exists($oController, $params['action'])) {
-            $response->body = 'Action '.$params['action'].' introuvable';
+        if (! method_exists($oController, $actionName)) {
+            $response->body = 'Action '.$actionName.' introuvable';
             $response->send404();
             return $response;
         }
 
-        $response = $oController->runAction($params['action']);
+        $response = $oController->runAction($actionName);
 
         /*$next = $oController->getNext();
         if ( ! is_null($next)) {

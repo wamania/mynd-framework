@@ -8,12 +8,12 @@ class Request
 {
     private $params;
 
-    public function __construct() 
+    public function __construct()
     {
 
     }
 
-    private function stripslashes() 
+    private function stripslashes()
     {
         if (get_magic_quotes_gpc()) {
             function stripslashes_deep($value)
@@ -29,31 +29,33 @@ class Request
         }
     }
 
-    public function init() 
+    public function init()
     {
         // On commence à virer les magic quote (beuuuuuuuuuuuurk)
         $this->stripslashes();
 
-        if (_c('url_handler') == 'rewrite') {
+        $config = Registery::get('config');
+
+        if ($config['url_handler'] == 'modrewrite') {
             $pathinfo = (isset($_GET['pathinfo']) ? $_GET['pathinfo'] : '');
 
-        } elseif (_c('url_handler') == 'multiviews') {
+        } elseif ($config['url_handler'] == 'multiviews') {
             if (isset($_SERVER['PATH_INFO'])) {
                 $pathinfo =  substr($_SERVER['PATH_INFO'], 1, strlen($_SERVER['PATH_INFO'])-1);
             }
 
-        } elseif (_c('url_handler') == 'querystring') {
+        } elseif ($config['url_handler'] == 'querystring') {
             if (isset($_GET['qs'])) {
                 $pathinfo =  substr($_GET['qs'], 1, strlen($_GET['qs'])-1);
             }
 
-        } elseif (_c('url_handler') == 'simple') {
+        } elseif ($config['url_handler'] == 'simple') {
             // Do nothing !
         } else {
-            throw new Exception ('Impossible de trouver un support pour ce type d\'url');
+            throw new \Exception ('Impossible de trouver un support pour ce type d\'url');
         }
 
-        $urlEngineClassName = 'Mynd\Core\Url\\'.ucwords(_c('url_handler')).'Url';
+        $urlEngineClassName = 'Mynd\Core\Url\\'.ucwords($config['url_handler']).'Url';
         try {
             $urlEngine = new $urlEngineClassName;
             $this->params = $urlEngine->url2params($pathinfo, $_GET);
@@ -94,12 +96,12 @@ class Request
     }
 
 
-    public static function is_post() 
+    public static function is_post()
     {
         return (self::method() == 'POST');
     }
 
-    public static function protocol() 
+    public static function protocol()
     {
         if ( (isset($_SERVER['HTTPS'])) && ($_SERVER['HTTPS'] == 'on') ) {
             return 'https://';

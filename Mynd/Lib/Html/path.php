@@ -1,21 +1,21 @@
 <?php
 
-function rootPath()
+function _rootPath()
 {
     return str_replace('index.php', '', $_SERVER['SCRIPT_NAME']);
 }
-function wwwPath()
+function _wwwPath()
 {
-    return rootPath().'www';
+    return _rootPath().'www';
 }
 function _img($path)
 {
-    return wwwPath().'/images/'.$path;
+    return _wwwPath().'/images/'.$path;
 }
 
 function _cssPath($path)
 {
-    return wwwPath().'/css/'.$path;
+    return _wwwPath().'/css/'.$path;
 }
 
 function _css($path)
@@ -25,12 +25,12 @@ function _css($path)
 
 function _file($path)
 {
-    return wwwPath().'/files/'.$path;
+    return _wwwPath().'/files/'.$path;
 }
 
 function _jsPath($path)
 {
-    return wwwPath().'/js/'.$path;
+    return _wwwPath().'/js/'.$path;
 }
 
 function _js($path)
