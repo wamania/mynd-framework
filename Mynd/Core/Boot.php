@@ -35,7 +35,7 @@ class Boot
 
         // configuration par default
         Registery::setAndMerge('config', array(
-            'default_module' => 'Index',
+            'default_module' => 'Front',
             'default_controller' => 'Index',
             'default_action' => 'Index'
         ), true);

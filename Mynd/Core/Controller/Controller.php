@@ -224,7 +224,7 @@ abstract class Controller {
 
         // On envoi les erreurs au js
         if ( ! empty($this->jsErrors)) {
-            $render = new stdClass();
+            $render = new \stdClass();
             $render->code = 'error';
             $render->msg = implode('<br />', $this->jsErrors);
             $this->render_text(json_encode($render));
@@ -233,7 +233,7 @@ abstract class Controller {
 
         // on envoi le success au js
         if ( ! empty($this->jsSuccess)) {
-            $render = new stdClass();
+            $render = new \stdClass();
             $render->code = 'success';
 
             $msgs = array();

@@ -241,7 +241,7 @@ class Select implements \Iterator, \Countable, \ArrayAccess
 
         $this->limit($perPage, ($page-1)*$perPage);
 
-        $paginator = new MfPaginatorSelect($page, $perPage);
+        $paginator = new Paginator\PaginatorSelect($page, $perPage);
         $paginator->setCount($count);
         $paginator->setSelect(clone($this));
 

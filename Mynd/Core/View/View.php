@@ -55,7 +55,7 @@ class View
     {
 
         if ( ! is_array($template)) {
-            $template = _selector($template, array(
+            $template = Url::selector($template, array(
                 'module'=>$this->params['module'],
                 'controller'=> $this->params['controller']
             ));
@@ -85,7 +85,7 @@ class View
      */
     public function render_partial( $template, $data = array() )
     {
-        $template = _selector($template, array(
+        $template = Url::selector($template, array(
             'module'=>$this->params['module'],
             'controller'=> $this->params['controller']
         ));

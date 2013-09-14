@@ -185,7 +185,7 @@ class Model
         return false;
     }
 
-    private function insert(array $array = array())
+    public function insert(array $array = array())
     {
         /*if (!empty($array)) {
             $this->inject($array);
@@ -221,7 +221,7 @@ class Model
         //}
     }
 
-    private function update(array $array = array())
+    public function update(array $array = array())
     {
         /*if (!empty($array)) {
             $this->inject($array);
