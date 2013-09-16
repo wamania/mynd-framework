@@ -104,13 +104,4 @@ class Url
 
         return $queryParams;
     }
-
-    /**
-     * TODO : gestion des accents
-     * @param unknown_type $string
-     */
-    public static function urlize($string)
-    {
-        return preg_replace('#([^0-9a-zA-Z\.])#', '-', $string);
-    }
 }

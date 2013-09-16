@@ -38,4 +38,22 @@ class String
         $output = array_unique($output);
         return $output;
     }
+
+    /**
+     * TODO : gestion des accents
+     * @param unknown_type $string
+     */
+    public static function urlize($string)
+    {
+        return preg_replace('#([^0-9a-zA-Z\.])#', '-', $string);
+    }
+
+    public static function truncate($text, $length = 30, $truncate_string = '...')
+    {
+        if (utf8_strlen($text) > $length) {
+            return utf8_substr_replace($text, $truncate_string, $length - utf8_strlen($truncate_string));
+        } else {
+            return $text;
+        }
+    }
 }
