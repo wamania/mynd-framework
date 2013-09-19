@@ -2,7 +2,7 @@
 
 namespace Mynd\Lib\Cache;
 
-class ApcCache
+class Apccache
 {
     public function __construct()
     {

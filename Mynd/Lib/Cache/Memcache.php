@@ -2,7 +2,7 @@
 
 namespace Mynd\Lib\Cache;
 
-class MemCache
+class Memcache
 {
     private $memcache;
 

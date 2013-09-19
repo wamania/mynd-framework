@@ -2,7 +2,7 @@
 
 namespace Mynd\Lib\Cache;
 
-class FakeCache
+class Fakecache
 {
     public function __construct()
     {
