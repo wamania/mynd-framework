@@ -33,6 +33,8 @@ class Select implements \Iterator, \Countable, \ArrayAccess
      */
     private $orderBy;
 
+    private $distinct;
+
     /**
      * @var Array
      */
@@ -45,6 +47,7 @@ class Select implements \Iterator, \Countable, \ArrayAccess
         $this->params = array();
         $this->results = null;
         $this->where = array();
+        $this->distinct = false;
     }
 
     /**
@@ -163,6 +166,11 @@ class Select implements \Iterator, \Countable, \ArrayAccess
         return clone($this);
     }
 
+    public function distinct($distinct = true)
+    {
+        $this->distinct = $distinct;
+    }
+
     /**
      * Factorisation de la construction de la clause where, en prenant en compte les orWhere
      */
@@ -194,7 +202,12 @@ class Select implements \Iterator, \Countable, \ArrayAccess
             }
         }
 
-        $query = "SELECT *  FROM " . $this->table;
+        $query = "SELECT ";
+        if ($this->distinct) {
+            $query .= 'DISTINCT ';
+        }
+
+        $query .= "*  FROM " . $this->table;
         $query .= $this->buildWhere();
 
         if (! empty($this->orderBy)) {
