@@ -8,7 +8,7 @@ class Memcache
 
     public function __construct()
     {
-        $this->memcache = new Memcache;
+        $this->memcache = new \Memcache;
     }
 
     public function setOptions($options)
