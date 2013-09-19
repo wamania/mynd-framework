@@ -169,6 +169,7 @@ class Select implements \Iterator, \Countable, \ArrayAccess
     public function distinct($distinct = true)
     {
         $this->distinct = $distinct;
+        return clone($this);
     }
 
     /**
