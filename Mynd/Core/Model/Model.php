@@ -96,7 +96,7 @@ class Model
             $select->where($where, $params);
 
         } else {
-            throw new MfModelException('Le 1er paramètre de la méthode static MfSimpleModel::one() est de type inconnu !', 102);
+            throw new ModelException('Le 1er paramètre de la méthode static Model::one() est de type inconnu !', 102);
             return;
         }
         $current = $select->current();
