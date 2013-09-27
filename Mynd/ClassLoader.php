@@ -150,7 +150,7 @@ class ClassLoader
 
                 foreach ($dirs as $dir) {
                     $file = $dir.DIRECTORY_SEPARATOR.$classPath;
-                    //echo $file."\n";
+
                     if (file_exists($file)) {
                         require $file;
                     }
