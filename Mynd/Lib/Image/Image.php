@@ -95,7 +95,9 @@ class Image
             imagecopyresampled($newImage , $this->image, $offsetImage, 0, 0, 0, $widthImage, $height, $this->size[0],$this->size[1]);
         }
 
-        switch($this->extension) {
+        $extension = self::getExtension($newFile);
+
+        switch($extension) {
             case 'jpg':
             case 'jpeg':
                 return imagejpeg($newImage, $newFile);
@@ -201,7 +203,7 @@ class Image
         return imagepng($newImage, $newFile);
     }
 
-    private function rgb2array($rgb) 
+    private function rgb2array($rgb)
     {
         return array(
             base_convert(substr($rgb, 0, 2), 16, 10),
