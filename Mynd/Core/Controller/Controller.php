@@ -316,33 +316,6 @@ abstract class Controller {
 
     public function render_file($file, $filename, $force = true, $mimetype = null)
     {
-        /*$tab = array();
-        if (preg_match('#.*\.([a-zA-Z]{2,4})$#', $filename, $tab)) {
-            $extension = $tab[1];
-            switch($extension) {
-
-                case 'docx':
-                    $mimetype = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-                    $force = false;
-                    break;
-
-                case 'xlsx':
-                    $mimetype = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-                    $force = false;
-                    break;
-
-                case 'pptx':
-                    $mimetype = 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
-                    $force = false;
-                    break;
-
-                case 'ppsx':
-                    $mimetype = 'application/vnd.openxmlformats-officedocument.presentationml.slideshow';
-                    $force = false;
-                    break;
-            }
-        }*/
-
         if (is_null($mimetype)) {
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
             $mimetype = finfo_file($finfo, $file);
