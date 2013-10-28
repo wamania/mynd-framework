@@ -31,9 +31,11 @@ class Select implements \Iterator, \Countable, \ArrayAccess
     /**
      * @var String
      */
-    private $orderBy;
+    private $order;
 
     private $distinct;
+
+    private $group;
 
     /**
      * @var Array
@@ -144,28 +146,34 @@ class Select implements \Iterator, \Countable, \ArrayAccess
     }
 
     /**
-     * Getter de l'attribut orderBy
+     * Getter de l'attribut order
      *
      * @return Object of LiSqlQuery Retourne un clone de lui-même
      * @param String $str Utilise les signes + et - au lieu de ASC et DESC: '-name'
      */
-    public function orderBy($str)
+    public function order($str)
     {
-        $this->orderBy = func_get_args();
+        $this->order = func_get_args();
         return clone($this);
     }
 
     /**
-     * Synonyme of orderBy
+     * Mysql "Group by"
      * @param unknown_type $str
-     * @return Ambigous <object, MfSimpleSelect>
+     * @return \Mynd\Core\Model\Select
      */
-    public function order($str)
+    public function group($str)
     {
-        $this->orderBy = func_get_args();
+        $this->group = func_get_args();
         return clone($this);
     }
 
+    /**
+     * Mysql distinct
+     *
+     * @param unknown_type $distinct
+     * @return \Mynd\Core\Model\Select
+     */
     public function distinct($distinct = true)
     {
         $this->distinct = $distinct;
@@ -196,10 +204,10 @@ class Select implements \Iterator, \Countable, \ArrayAccess
 
     public function execute()
     {
-        if ( (!empty($this->orderBy)) && (is_array($this->orderBy)) ) {
-            foreach ($this->orderBy as $key => $value) {
-                $this->orderBy[$key] = preg_replace ('#\+([0-9a-zA-Z\-\_]+)#', '$1 ASC', $value);
-                $this->orderBy[$key] = preg_replace ('#\-([0-9a-zA-Z\-\_]+)#', '$1 DESC', $value);
+        if ( (!empty($this->order)) && (is_array($this->order)) ) {
+            foreach ($this->order as $key => $value) {
+                $this->order[$key] = preg_replace ('#\+([0-9a-zA-Z\-\_]+)#', '$1 ASC', $value);
+                $this->order[$key] = preg_replace ('#\-([0-9a-zA-Z\-\_]+)#', '$1 DESC', $value);
             }
         }
 
@@ -211,8 +219,11 @@ class Select implements \Iterator, \Countable, \ArrayAccess
         $query .= "*  FROM " . $this->table;
         $query .= $this->buildWhere();
 
-        if (! empty($this->orderBy)) {
-            $query .= " ORDER BY " . implode(',', $this->orderBy);
+        if (! empty($this->group)) {
+            $query .= " GROUP BY " . implode(',', $this->group);
+        }
+        if (! empty($this->order)) {
+            $query .= " ORDER BY " . implode(',', $this->order);
         }
 
         if (! empty($this->limitLength)) {
@@ -238,13 +249,6 @@ class Select implements \Iterator, \Countable, \ArrayAccess
      */
     public function paginate($page, $perPage)
     {
-        // la clé primaire
-        /*if (is_array($this->primary)) {
-            $col = '*';
-        } else {
-            $col = $this->primary;
-        }*/
-
         // on commence par le count
         $query = "SELECT COUNT(".$this->primary.") FROM ".$this->table;
         $query .= $this->buildWhere();
@@ -455,8 +459,11 @@ class Select implements \Iterator, \Countable, \ArrayAccess
             $query .= " WHERE " . implode (' AND ', $queryWhere);
         }
 
-        if (! empty($this->orderBy)) {
-            $query .= " ORDER BY " . implode(',', $this->orderBy);
+        if (!empty($this->group)) {
+            $query .= " GROUP BY " . implode(',', $this->group);
+        }
+        if (! empty($this->order)) {
+            $query .= " ORDER BY " . implode(',', $this->order);
         }
 
         if (! empty($this->limitLength)) {
