@@ -96,11 +96,11 @@ class View
 
         return $partialView->render($template, $data);
 
-        return $this->render($template, $data);
+        //return $this->render($template, $data);
     }
 
     /**
-     * synonime plus court
+     * synonyme plus court
      * @param unknown_type $template
      * @param unknown_type $data
      */
