@@ -187,69 +187,64 @@ class Model
 
     public function insert(array $array = array())
     {
-        /*if (!empty($array)) {
+        if (!empty($array)) {
             $this->inject($array);
-        }*/
+        }
+
         $columns = $this->queryColumns();
 
-        // insert
-        //if (empty($this->id)) {
-            $cols = array();
-            $vals = array();
-            $params = array();
+        $cols = array();
+        $vals = array();
+        $params = array();
 
-            foreach ($columns as $c) {
-                if (isset($this->data[$c])) {
-                    $cols[] = $c;
-                    $vals[] = ':'.$c;
-                    $params[':'.$c] = $this->data[$c];
-                }
+        foreach ($columns as $c) {
+            if (array_key_exists($c, $this->data)) {
+                $cols[] = $c;
+                $vals[] = ':'.$c;
+                $params[':'.$c] = $this->data[$c];
             }
-            if ( (in_array('created_on', $columns)) && (!in_array('created_on', $cols)) ) {
-                $cols[] = 'created_on';
-                $vals[] = ':created_on';
-                $params[':created_on'] = date('Y-m-d H:i:s');
-            }
+        }
+        if ( (in_array('created_on', $columns)) && (!in_array('created_on', $cols)) ) {
+            $cols[] = 'created_on';
+            $vals[] = ':created_on';
+            $params[':created_on'] = date('Y-m-d H:i:s');
+        }
 
-            $sql = "INSERT INTO " . static::$table . ' (' . implode(', ', $cols) . ') ' . 'VALUES (' . implode(', ', $vals) . ')';
-            $s = $this->db->prepare($sql);
-            $check = $s->execute($params);
+        $sql = "INSERT INTO " . static::$table . ' (' . implode(', ', $cols) . ') ' . 'VALUES (' . implode(', ', $vals) . ')';
+        $s = $this->db->prepare($sql);
+        $check = $s->execute($params);
 
-            $this->{static::$primary} = $this->db->lastInsertId();
+        $this->{static::$primary} = $this->db->lastInsertId();
 
-            return $check;
-        //}
+        return $check;
     }
 
     public function update(array $array = array())
     {
-        /*if (!empty($array)) {
+        if (!empty($array)) {
             $this->inject($array);
-        }*/
+        }
+
         $columns = $this->queryColumns();
 
-        // insert
-        //if ( ! empty($this->id)) {
-            $set = array();
-            $params = array();
+        $set = array();
+        $params = array();
 
-            foreach ($columns as $c) {
-                if (isset($this->data[$c])) {
-                    $set[] = $c.'=:'.$c;
-                    $params[':'.$c] = $this->data[$c];
-                }
+        foreach ($columns as $c) {
+            if (array_key_exists($c, $this->data)) {
+                $set[] = $c.'=:'.$c;
+                $params[':'.$c] = $this->data[$c];
             }
-            if (in_array('updated_on', $columns)) {
-                $set[] = 'updated_on=:updated_on';
-                $params[':updated_on'] = date('Y-m-d H:i:s');
-            }
-            $sql = "UPDATE " . static::$table . ' SET ' . implode(', ', $set) . " WHERE ".static::$primary." = :".static::$primary;
+        }
 
-            $s = $this->db->prepare($sql);
-            return $s->execute($params);
-        //}
+        if (in_array('updated_on', $columns)) {
+            $set[] = 'updated_on=:updated_on';
+            $params[':updated_on'] = date('Y-m-d H:i:s');
+        }
+        $sql = "UPDATE " . static::$table . ' SET ' . implode(', ', $set) . " WHERE ".static::$primary." = :".static::$primary;
 
-        //return false;
+        $s = $this->db->prepare($sql);
+        return $s->execute($params);
     }
 
     public function delete()
