@@ -28,6 +28,12 @@ class Model
     public static $primary = 'id';
 
     /**
+     * Sequence d'auto increment pour Postgresql
+     * @var unknown_type
+     */
+    public static $sequence = null;
+
+    /**
      * un cache très simple pour stocker les colonnes
      * @var Array
      */
@@ -220,7 +226,7 @@ class Model
         $s = $this->db->prepare($sql);
         $check = $s->execute($params);
 
-        $this->{static::$primary} = $this->db->lastInsertId();
+        $this->{static::$primary} = $this->db->lastInsertId(static::$sequence);
 
         return $check;
     }
@@ -243,7 +249,7 @@ class Model
             }
         }
 
-        if (in_array('updated_on', $columns)) {
+        if ( (in_array('updated_on', $columns)) && (!array_key_exists('updated_on', $this->data)) ) {
             $set[] = 'updated_on=:updated_on';
             $params[':updated_on'] = date('Y-m-d H:i:s');
         }
