@@ -38,6 +38,12 @@ class Db
     private $pdo;
 
     /**
+     * Pdo driver (mysql, pgsql)
+     * @var String
+     */
+    private $driver;
+
+    /**
      * Default constructor
      * @param $config
      * @return unknown_type
@@ -47,6 +53,11 @@ class Db
         $this->dsn = $dsn;
         $this->user = $user;
         $this->pass = $pass;
+
+        $this->driver = 'mysql';
+        if (strstr($dsn, 'pgsql')) {
+            $this->driver = 'pgsql';
+        }
     }
 
     /**
@@ -73,6 +84,11 @@ class Db
             throw new LiException('Echec connexion PDO : '.$e->getMessage());
             //echo 'Echec connexion PDO : '.$e->getMessage()."\n<br />";
         }
+    }
+
+    public function getDriver()
+    {
+        return $this->driver;
     }
 
     public function __call($method, $args)

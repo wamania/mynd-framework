@@ -4,43 +4,43 @@ namespace Mynd\Core\Model;
 
 class Select implements \Iterator, \Countable, \ArrayAccess
 {
-    private $db;
+    protected $db;
 
-    private $key;
+    protected $key;
 
-    private $results;
+    protected $results;
 
-    private $table;
+    protected $table;
 
-    private $primary;
+    protected $primary;
 
-    private $class;
+    protected $class;
 
-    private $where;
-
-    /**
-     * @var Integer
-     */
-    private $limitLength;
+    protected $where;
 
     /**
      * @var Integer
      */
-    private $limitOffset;
+    protected $limitLength;
+
+    /**
+     * @var Integer
+     */
+    protected $limitOffset;
 
     /**
      * @var String
      */
-    private $order;
+    protected $order;
 
-    private $distinct;
+    protected $distinct;
 
-    private $group;
+    protected $group;
 
     /**
      * @var Array
      */
-    private $params;
+    protected $params;
 
 
     public function __construct()

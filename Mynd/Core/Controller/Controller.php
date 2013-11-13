@@ -380,7 +380,7 @@ abstract class Controller {
             foreach ($this->filter['before'] as $key => $value) {
                 if (in_array($action, $value)) {
                     if ( ! method_exists($this, $key)) {
-                        throw new Exception ('Filtre before '.$key.' inextistant');
+                        throw new \Exception ('Filtre before '.$key.' inextistant');
                     } else {
                         $this->$key();
                     }

@@ -46,8 +46,11 @@ class Model
      */
     public static function select($where=null, $params=null)
     {
+        $db = _r('db');
+        $selectClass = '\Mynd\Core\Model\Abstraction\\'.ucwords($db->getDriver()).'_Select';
+        $select = new $selectClass();
+
         $class = get_called_class();
-        $select = new \Mynd\Core\Model\Select();
 
         if (empty(static::$table)) {
             static::$table = strtolower($class);
@@ -76,8 +79,11 @@ class Model
      */
     public static function one($where, $params=null)
     {
+        $db = _r('db');
+        $selectClass = '\Mynd\Core\Model\Abstraction\\'.ucwords($db->getDriver()).'_Select';
+        $select = new $selectClass();
+
         $class = get_called_class();
-        $select = new \Mynd\Core\Model\Select();
 
         if (empty(static::$table)) {
             static::$table = strtolower($class);
@@ -295,14 +301,23 @@ class Model
     {
         if (empty(self::$cache[static::$table])) {
 
-            $s = $this->db->query("SHOW COLUMNS FROM " . static::$table);
+            // temporaire...
+            if ($this->db->getDriver() == 'mysql') {
+                $s = $this->db->query("SHOW COLUMNS FROM " . static::$table);
+
+            } elseif ($this->db->getDriver() == 'pgsql') {
+                $s = $this->db->prepare("SELECT column_name AS field FROM information_schema.columns WHERE table_name=?");
+                $s->execute(array(static::$table));
+            }
+
+
             if ($s->rowCount() <= 0) {
                 throw new LiException ('La table ' . $table . ' ne contient aucune colonne');
             }
             $rs = $s->fetchAll();
             $fields = array();
             foreach ($rs as $row) {
-                $fields[] = $row['Field'];
+                $fields[] = $row['field'];
             }
 
             self::$cache[static::$table] = $fields;
