@@ -98,7 +98,10 @@ class Db
         }
 
         if(method_exists($this->pdo, $method)) {
-            return call_user_func_array(array($this->pdo, $method), $args);
+            echo '<!-- '.print_r($args,1 ).' -->';
+            $start = microtime(true);
+            $check = call_user_func_array(array($this->pdo, $method), $args);
+            echo '<!-- '.(microtime(true)-$start).' -->';
         }
     }
 }
