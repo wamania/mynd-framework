@@ -223,6 +223,7 @@ class Model
         }
 
         $sql = "INSERT INTO " . static::$table . ' (' . implode(', ', $cols) . ') ' . 'VALUES (' . implode(', ', $vals) . ')';
+
         $s = $this->db->prepare($sql);
         $check = $s->execute($params);
 
@@ -291,6 +292,11 @@ class Model
     public function __isset($key)
     {
         return isset($this->data[$key]);
+    }
+
+    public function __unset($key)
+    {
+        unset($this->data[$key]);
     }
 
     public function getDatas()
