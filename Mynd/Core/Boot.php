@@ -50,19 +50,9 @@ class Boot
             $db_config = $db_configs[$environment];
             Registery::set('db_config', $db_config);
 
-            // initialisation du model
-            //$db_config = _r('db_config');
-
+            // initialisation de la bdd
             if ( ( ! empty($db_config['dsn'])) && ( ! empty($db_config['user'])) ) {
                 Registery::set('db', new Db($db_config['dsn'], $db_config['user'], $db_config['pass']));
-
-                /*$model = _c('model');
-                if ( (empty($model)) || ($model == 'simple') ) {
-                    spl_autoload_register(array('MfInitSimpleModel', 'includeModel'));
-
-                } elseif ($model == 'orm') {
-                    spl_autoload_register(array('MfInitOrm', 'includeModel'));
-                }*/
             }
         }
 
@@ -87,12 +77,6 @@ class Boot
         }
 
         $response = self::launch($request);
-
-        // la reponse est une requete, on la lance
-        /*if ($response instanceof MfRequest) {
-            $response = self::launch($response);
-        }*/
-
         $response->out();
     }
 
@@ -108,36 +92,6 @@ class Boot
             return $response;
         }
 
-        /*$controllerPath = LI_APP.'Modules/'.$params['module'].'/Controller/'.$params['controller'].'Controller.php';
-
-        if (file_exists($controllerPath)) {
-            require_once $controllerPath;
-        } else {
-            $response->body = 'Controleur '.$params['controller'].' introuvable ('.$controllerPath.' )';
-            $response->send404();
-            return $response;
-        }*/
-
-        // détermination du nom du module
-        /*$tabModule = explode('-', $params['module']);
-        $moduleName = '';
-        foreach ($tabModule as $partModule) {
-            $moduleName .= ucfirst($partModule);
-        }
-
-        // détermination du nom du controlleur
-        $tabController = explode('-', $params['controller']);
-        $controllerName = '';
-        foreach ($tabController as $partController) {
-            $controllerName .= ucfirst($partController);
-        }
-
-        // détermination du nom de l'action
-        $tabAction = explode('-', $params['action']);
-        $actionName = '';
-        foreach ($tabAction as $partAction) {
-            $actionName .= ucfirst($partAction);
-        }*/
         $moduleName = Url::toClass($params['module']);
         $controllerName = Url::toClass($params['controller']);
         $actionName = Url::toClass($params['action']);
@@ -158,11 +112,6 @@ class Boot
         }
 
         $response = $oController->runAction($actionName);
-
-        /*$next = $oController->getNext();
-        if ( ! is_null($next)) {
-            return $next;
-        }*/
 
         return $response;
     }

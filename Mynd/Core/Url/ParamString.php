@@ -15,7 +15,7 @@ abstract class ParamString implements iUrlEngine
 
         $tabUrl = explode('/', $url);
 
-        foreach ($routes as $route) {
+        foreach ($routes as $routeName => $route) {
 
             $routeUrl = substr($route['url'], 1, strlen($route['url'])-1);
 
@@ -47,7 +47,10 @@ abstract class ParamString implements iUrlEngine
                 }
                 unset($get['ps']);
 
-                return array_merge($route['params'], $matches, $this->array_urldecode($get));
+                return array(
+                    'route_name' => $routeName,
+                    'params' => array_merge($route['params'], $matches, $this->array_urldecode($get))
+                );
             }
         }
 

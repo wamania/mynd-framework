@@ -8,6 +8,7 @@ class SimpleUrl implements iUrlEngine
     {
 
         $params = array();
+
         if ( (!isset($get['controller'])) && (!isset($get['action'])) ) {
             $get['module'] = _c('default_module');
             $get['controller'] = _c('default_controller');
@@ -24,7 +25,7 @@ class SimpleUrl implements iUrlEngine
             }
         }
 
-        return $params;
+        return array('route_name' => 'default', 'params' => $params);
     }
 
     public function params2path($params)
@@ -57,7 +58,7 @@ class SimpleUrl implements iUrlEngine
         .'?'.$path;
     }
 
-    public function params2url($params) 
+    public function params2url($params)
     {
         $path = $this->params2path($params);
         return $this->path2url($path);

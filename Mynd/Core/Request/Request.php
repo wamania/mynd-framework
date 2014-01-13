@@ -8,6 +8,8 @@ class Request
 {
     private $params;
 
+    private $routeName;
+
     public function __construct()
     {
 
@@ -58,7 +60,10 @@ class Request
         $urlEngineClassName = 'Mynd\Core\Url\\'.ucwords($config['url_handler']).'Url';
         try {
             $urlEngine = new $urlEngineClassName;
-            $this->params = $urlEngine->url2params($pathinfo, $_GET);
+            $route = $urlEngine->url2params($pathinfo, $_GET);
+
+            $this->params = $route['params'];
+            $this->routeName = $route['route_name'];
 
             if (isset($this->params['pathinfo'])) {
                 unset($this->params['pathinfo']);
@@ -71,6 +76,7 @@ class Request
         $this->params = array_merge($this->params, $_POST);
 
         // On stocke les paramètres dans le registre
+        Registery::set('route_name', $this->routeName);
         Registery::set('params', $this->params);
     }
 
