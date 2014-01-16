@@ -6,7 +6,6 @@ class SimpleUrl implements iUrlEngine
 {
     public function url2params($url, $get)
     {
-
         $params = array();
 
         if ( (!isset($get['controller'])) && (!isset($get['action'])) ) {

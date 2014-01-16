@@ -465,7 +465,7 @@ abstract class Controller {
      * @param $params Object
      * @deprecated
      */
-    public function redirect_to($params) {
+    public function redirect_to($params, array $options = array()) {
         // Tableau de params, dont controller et action
         if (is_array($params)) {
             if ( empty($params['controller'])) {
@@ -483,7 +483,7 @@ abstract class Controller {
             $url = Url::_($params);
         }
 
-        $this->response->redirect($url);
+        $this->response->redirect($url, $options);
     }
 
     /**
@@ -491,8 +491,8 @@ abstract class Controller {
      *
      * @param unknown_type $params
      */
-    public function redirectTo($params)
+    public function redirectTo($params, $options)
     {
-        $this->redirect_to($params);
+        $this->redirect_to($params, $options);
     }
 }
