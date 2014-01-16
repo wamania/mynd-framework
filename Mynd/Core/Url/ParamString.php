@@ -54,7 +54,7 @@ abstract class ParamString implements iUrlEngine
             }
         }
 
-        return $this->array_urldecode($get);
+        return array('route_name' => 'default', 'params' => $this->array_urldecode($get));
     }
 
     public function params2path($params)
