@@ -491,7 +491,7 @@ abstract class Controller {
      *
      * @param unknown_type $params
      */
-    public function redirectTo($params, $options)
+    public function redirectTo($params, $options = array())
     {
         $this->redirect_to($params, $options);
     }
