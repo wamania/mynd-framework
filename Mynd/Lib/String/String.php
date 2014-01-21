@@ -24,6 +24,21 @@ class String
         return $text;
     }
 
+    /**
+     * reconstruction of a slugify string
+     * info : special characters and accents are not reconstituted !
+     * @author josedacosta <contact@josedacosta.info>
+     * @param string $text slugify string
+     * @return string unslugify string
+     */
+    public static function unslugify($text)
+    {
+        $text = preg_replace('-',' ', $text);
+        $text = preg_replace('\s+',' ', $text);
+        // $text = strtolower($text);
+        return $text;
+    }
+
     public static function parseAndExplode($str)
     {
         $INVALIDE_WORDS = array('est', 'sont', 'de', 'du', 'ca', 'ça', 'ce', 'et', 'la', 'le', 'les', 'un', 'une', 'ta', 'ton', 'tes', 'mon','ma', 'mes', 'son,', 'sa', 'ses', 'vos', 'nos', 'leurs', 'leur');
