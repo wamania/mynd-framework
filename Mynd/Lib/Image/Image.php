@@ -43,7 +43,7 @@ class Image
      * @param $height
      * @return unknown_type
      */
-    public function getBoxedImage($width, $height, $newFile)
+    public function getBoxedImage($width, $height, $newFile, $jpegQuality = 100)
     {
         if (is_null($this->image)) {
             return false;
@@ -100,7 +100,7 @@ class Image
         switch($extension) {
             case 'jpg':
             case 'jpeg':
-                return imagejpeg($newImage, $newFile);
+                return imagejpeg($newImage, $newFile, $jpegQuality);
                 break;
             case 'png':
                 return imagepng($newImage, $newFile);
@@ -112,7 +112,7 @@ class Image
         return false;
     }
 
-    public function getWidthedImage($width, $newFile)
+    public function getWidthedImage($width, $newFile, $jpegQuality = 100)
     {
         if (is_null($this->image)) {
             return false;
@@ -139,7 +139,7 @@ class Image
         switch($this->extension) {
             case 'jpg':
             case 'jpeg':
-                return imagejpeg($newImage, $newFile);
+                return imagejpeg($newImage, $newFile, $jpegQuality);
                 break;
             case 'png':
                 return imagepng($newImage, $newFile);
@@ -151,7 +151,7 @@ class Image
         return false;
     }
 
-    public function getHeightedImage($height, $newFile)
+    public function getHeightedImage($height, $newFile, $jpegQuality = 100)
     {
         if (is_null($this->image)) {
             return false;
@@ -178,7 +178,7 @@ class Image
         switch($this->extension) {
             case 'jpg':
             case 'jpeg':
-                return imagejpeg($newImage, $newFile);
+                return imagejpeg($newImage, $newFile, $jpegQuality);
                 break;
             case 'png':
                 return imagepng($newImage, $newFile);
